@@ -22,6 +22,12 @@
   line-height: 1.2;
 }
 
+/* Figma: Tag 4, coursework on the dark About Me section */
+.tag--light {
+  border-color: var(--color-white);
+  color: var(--color-white);
+}
+
 .tag-list {
   display: flex;
   flex-wrap: wrap;

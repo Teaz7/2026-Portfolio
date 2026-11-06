@@ -1,0 +1,194 @@
+/* Figma: About Me (1920px frame). Comments give the Figma px values. */
+
+/* Purple caps labels: "TECHNOLOGIES I'VE WORKED WITH" */
+.about-label {
+  color: var(--color-purple);
+  font-family: var(--font-heading);
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.about-tag-row {
+  flex-wrap: nowrap;
+  gap: 1.25rem; /* 20px */
+}
+
+/* Intro */
+.about-intro {
+  margin-top: 3.75rem; /* 60px below the nav */
+  margin-bottom: 3.75rem; /* 60px above the dark section */
+}
+
+.about-intro__title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.125rem; /* 146px */
+  font-weight: 800;
+  line-height: 1.5;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.about-intro__name {
+  color: var(--color-purple);
+}
+
+.about-intro__body {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.about-intro__content {
+  width: 56.25rem; /* 900px */
+  padding-top: 5rem; /* 80px below the title */
+}
+
+.about-intro__text {
+  width: 50.25rem; /* 804px */
+  font-size: 2rem; /* 32px */
+  line-height: 2.8125rem; /* 45px */
+}
+
+.about-intro__content .about-label {
+  margin-top: 3.125rem; /* 50px */
+}
+
+.about-intro__tags {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* 20px */
+  margin-top: 1.25rem;
+}
+
+.about-intro__photo {
+  width: 31.875rem; /* 510px */
+  height: 31.75rem; /* 508px */
+  flex-shrink: 0;
+  border-radius: 2.5rem; /* 40px */
+  object-fit: cover;
+  object-position: 45.6% 29.1%; /* same crop as Figma */
+}
+
+/* Dark history section */
+.about-history {
+  padding-top: 3.125rem; /* 50px */
+  padding-bottom: 3.125rem;
+  background: var(--color-dark);
+  color: var(--color-white);
+}
+
+/* Timeline: a 1760×286 diagram, positioned like the Figma frame */
+.timeline {
+  position: relative;
+  width: 110rem;
+  height: 17.875rem;
+  margin-top: 3.125rem; /* 50px below the label */
+}
+
+.timeline__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline__path {
+  position: absolute;
+  top: 5.125rem; /* 82px */
+  left: 0;
+  width: 110.2225rem; /* 1763.56px */
+  height: 7.6699rem; /* 122.72px */
+  max-width: none;
+}
+
+.timeline__arrow {
+  position: absolute;
+  top: 11.5625rem; /* 185px */
+  left: 10.3125rem; /* 165px */
+  width: 1.0917rem; /* 17.47px */
+  height: 1.9375rem; /* 31px */
+}
+
+.timeline__line {
+  position: absolute;
+  width: 12.625rem; /* 202px */
+  height: 0.25rem; /* 4px */
+}
+
+.timeline__line--row1 {
+  top: 5.0625rem; /* 81px */
+}
+
+.timeline__line--row2 {
+  top: 12.5625rem; /* 201px */
+}
+
+.timeline__chip {
+  position: absolute;
+  padding: 0.9375rem 2.1875rem; /* 15px 35px */
+  border: 2px solid var(--color-white);
+  border-radius: var(--radius-pill);
+  background: var(--color-dark);
+  font-size: 2rem; /* 32px */
+  font-weight: 500;
+  line-height: 2.1875rem; /* 35px */
+  white-space: nowrap;
+}
+
+.timeline__chip--row1 {
+  top: 3.0625rem; /* 49px */
+}
+
+.timeline__chip--row2 {
+  top: 10.5rem; /* 168px */
+}
+
+.timeline__years {
+  position: absolute;
+  color: var(--color-purple);
+  font-size: 1.5rem; /* 24px */
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.timeline__years--row1 {
+  top: 0;
+}
+
+.timeline__years--row2 {
+  top: 16.0625rem; /* 257px */
+}
+
+/* Story: two columns of paragraphs */
+.about-history__story {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3.125rem; /* 50px */
+  font-size: 2rem; /* 32px */
+  line-height: 2.8125rem; /* 45px */
+}
+
+.about-history__column {
+  display: flex;
+  flex-direction: column;
+  gap: 3.125rem; /* 50px */
+  width: 56.0625rem; /* 897px */
+}
+
+.about-history__column--right {
+  width: 49.8125rem; /* 797px */
+}
+
+/* Coursework */
+.about-history__coursework-label {
+  margin-top: 4.375rem; /* 70px */
+}
+
+.about-coursework {
+  display: flex;
+  flex-direction: column;
+  gap: 1.875rem; /* 30px */
+  margin-top: 1.875rem;
+}
