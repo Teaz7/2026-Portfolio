@@ -1,0 +1,472 @@
+/* Figma: Experiences (1920px frame). Comments give the Figma px values. */
+
+/* Header */
+.exp-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3.75rem; /* 60px below the nav */
+}
+
+.exp-header__title {
+  font-size: 9.125rem; /* 146px */
+  font-weight: 800;
+  line-height: 1.5;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* "◆ GAME DEV COMPETITIONS" labels. Only the first needs a gap (50px below the
+   chips); the others follow a section that already ends with 50px of padding. */
+.exp-header + .exp-label {
+  padding-top: 3.125rem;
+}
+
+/* Entries: competitions, LINK.exe, webinar */
+.exp-entry {
+  padding-top: 3.125rem; /* 50px */
+  padding-bottom: 3.125rem;
+}
+
+.exp-entry__main {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.exp-entry--game .exp-entry__content {
+  width: 77.1875rem; /* 1235px */
+}
+
+.exp-entry--link .exp-entry__content {
+  width: 69.625rem; /* 1114px */
+}
+
+.exp-entry--webinar .exp-entry__content {
+  width: 76.375rem; /* 1222px */
+}
+
+.exp-head {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem; /* 10px */
+  width: max-content;
+}
+
+.exp-head--game {
+  align-items: flex-end;
+}
+
+.exp-head__title {
+  font-size: 4.75rem; /* 76px */
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.exp-entry--webinar .exp-head__title {
+  width: 42.5rem; /* 680px, as in Figma */
+  line-height: 1.5;
+}
+
+.exp-head__category {
+  font-size: 2rem; /* 32px */
+  font-weight: 600;
+  line-height: 2.8125rem;
+  white-space: nowrap;
+}
+
+.exp-head__event {
+  color: var(--color-purple);
+  font-family: var(--font-heading);
+  font-size: 1.875rem; /* 30px */
+  line-height: 2.8125rem;
+  white-space: nowrap;
+}
+
+.exp-head__tags {
+  flex-wrap: nowrap;
+}
+
+.exp-intro {
+  margin-top: 1.5625rem; /* 25px */
+  color: var(--color-purple);
+  font-family: var(--font-heading);
+  font-size: 1.875rem; /* 30px */
+  line-height: 2.8125rem; /* 45px */
+}
+
+.exp-entry--link .exp-intro {
+  margin-top: 1.875rem; /* 30px */
+}
+
+.exp-entry--webinar .exp-intro {
+  margin-top: 0;
+}
+
+.exp-intro em {
+  font-style: italic;
+}
+
+.exp-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* 20px */
+  width: 70rem; /* 1120px */
+  margin: 1.5625rem 0 0; /* 25px */
+  padding: 0;
+  list-style: none;
+  font-size: 2rem; /* 32px */
+  line-height: 2.8125rem; /* 45px */
+}
+
+.exp-bullets li {
+  position: relative;
+  padding-left: 3.5625rem; /* 57px */
+}
+
+/* 15px rounded diamond, centered on the first line */
+.exp-bullets li::before {
+  content: '';
+  position: absolute;
+  top: 0.9375rem;
+  left: 0.55rem;
+  width: 0.9375rem;
+  height: 0.9375rem;
+  border-radius: 3px;
+  background: var(--color-purple);
+  transform: rotate(45deg);
+}
+
+/* Sidebar: Game Title / Role / Date */
+.exp-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.875rem; /* 30px */
+  width: 26.375rem; /* 422px */
+  margin: 4.0625rem 0 0; /* 65px */
+}
+
+.exp-entry--webinar .exp-side {
+  margin-top: 4.9375rem; /* 79px */
+}
+
+.exp-side--wide {
+  gap: 0.625rem; /* 10px */
+  width: 37.5rem; /* 600px */
+  margin-top: 4.75rem; /* 76px */
+}
+
+.exp-side__item {
+  border-top: 1px solid var(--color-dark);
+}
+
+.exp-side__item dt {
+  color: var(--color-purple);
+  font-size: 1.25rem; /* 20px */
+  line-height: 2.8125rem;
+  text-transform: uppercase;
+}
+
+.exp-side__item dd {
+  margin: 0;
+  font-size: 2rem; /* 32px */
+  font-weight: 600;
+  line-height: 2.8125rem;
+}
+
+.exp-side__item dd.is-small {
+  font-size: 1.5rem; /* 24px */
+}
+
+/* Dark gallery bands */
+.exp-band {
+  margin-top: 4.375rem; /* 70px */
+  padding-block: 3.125rem; /* 50px */
+  background: var(--color-dark);
+  color: var(--color-white);
+}
+
+.exp-entry--webinar .exp-band {
+  margin-top: 3.125rem; /* 50px */
+}
+
+/* Clickable image (opens the lightbox) */
+.exp-tile {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  overflow: hidden;
+  transition: transform var(--transition);
+}
+
+.exp-tile:hover {
+  transform: translateY(-4px);
+}
+
+.exp-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Competitions: poster + 2×3 grid */
+.exp-gallery-poster {
+  display: flex;
+  justify-content: center;
+  gap: 1.875rem; /* 30px */
+}
+
+.exp-gallery-poster__poster {
+  height: 53.75rem; /* 860px */
+}
+
+.exp-gallery-poster__poster img {
+  width: auto;
+}
+
+.exp-gallery-poster__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 28.125rem); /* 450px */
+  grid-auto-rows: 15.8125rem; /* 253px */
+  gap: 3.125rem; /* 50px */
+}
+
+/* LINK.exe: tall column + 3×3 grid, credit underneath */
+.exp-gallery-link {
+  width: max-content;
+  margin: 0 auto;
+}
+
+.exp-gallery-link__photos {
+  display: flex;
+  gap: 1.875rem; /* 30px */
+}
+
+.exp-gallery-link__tall {
+  display: flex;
+  flex-direction: column;
+  gap: 1.875rem;
+  width: 23.0625rem; /* 369px */
+}
+
+.exp-gallery-link__tall .exp-tile:first-child {
+  height: 30.6875rem; /* 491px */
+}
+
+.exp-gallery-link__tall .exp-tile:last-child {
+  height: 21.25rem; /* 340px */
+}
+
+.exp-gallery-link__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 25rem); /* 400px */
+  grid-auto-rows: 16.6875rem; /* 267px */
+  gap: 1.875rem; /* 30px */
+}
+
+.exp-gallery-link figcaption {
+  margin-top: 0.625rem; /* 10px */
+  font-family: var(--font-heading);
+  font-size: 1.25rem; /* 20px */
+  line-height: 2.8125rem;
+}
+
+/* Webinar: three images in a row */
+.exp-gallery-webinar {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem; /* 20px */
+  height: 27.9375rem; /* 447px */
+}
+
+.exp-gallery-webinar .exp-tile:nth-child(1) {
+  width: 20.9375rem; /* 335px */
+}
+
+.exp-gallery-webinar .exp-tile:nth-child(2) {
+  width: 37.375rem; /* 598px */
+}
+
+.exp-gallery-webinar .exp-tile:nth-child(3) {
+  width: 35.5625rem; /* 569px */
+}
+
+/* Awards */
+.exp-awards {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-top: 3.125rem; /* 50px */
+  padding-bottom: 6.25rem; /* 100px */
+}
+
+.exp-awards__list {
+  display: flex;
+  flex-direction: column;
+  gap: 3.75rem; /* 60px */
+  margin: 0;
+}
+
+.exp-awards__row {
+  display: grid;
+  grid-template-columns: 54.75rem auto; /* 876px name column */
+  align-items: end;
+  column-gap: 3.125rem; /* 50px */
+}
+
+.exp-awards__row dt {
+  font-family: var(--font-heading);
+  font-size: 4.75rem; /* 76px */
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.exp-awards__row dd {
+  margin: 0;
+  color: var(--color-purple);
+  font-size: 2rem; /* 32px */
+  font-weight: 600;
+  line-height: 2.8125rem;
+  white-space: nowrap;
+}
+
+.exp-awards__side {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem; /* 40px */
+  width: 30.9375rem; /* 495px */
+}
+
+.exp-awards__note {
+  border-top: 1px solid var(--color-dark);
+}
+
+.exp-awards__note-label {
+  color: var(--color-purple);
+  font-size: 1.25rem; /* 20px */
+  line-height: 2.8125rem;
+  text-transform: uppercase;
+}
+
+.exp-awards__note-text {
+  font-family: var(--font-heading);
+  font-size: 1.5rem; /* 24px */
+  line-height: 2.8125rem;
+}
+
+.exp-awards__gwa {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: 0.9375rem 3.125rem; /* 15px 50px */
+  margin: 0;
+  font-size: 2rem; /* 32px */
+  line-height: 2.8125rem;
+}
+
+.exp-awards__gwa div {
+  display: contents;
+}
+
+.exp-awards__gwa dt {
+  min-width: 7.4375rem; /* 119px */
+}
+
+.exp-awards__gwa dd {
+  margin: 0;
+  font-weight: 300;
+}
+
+/* Certificates */
+.exp-certs__title {
+  font-size: 4.75rem; /* 76px */
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.exp-label + .exp-certs .exp-certs__title {
+  margin-top: 3.125rem; /* 50px below the label */
+}
+
+.exp-certs__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.625rem 1.25rem; /* 10px 20px */
+  margin: 0 auto;
+  padding: 3.125rem 0; /* 50px */
+  list-style: none;
+}
+
+.exp-certs__grid--lg {
+  width: 105.625rem; /* 1690px: 3 × 550 */
+}
+
+.exp-certs__grid--lg li {
+  width: 34.375rem; /* 550px */
+}
+
+.exp-certs__grid--sm {
+  width: 108.75rem; /* 1740px: 4 × 420 */
+}
+
+.exp-certs__grid--sm li {
+  width: 26.25rem; /* 420px */
+}
+
+.exp-certs__grid--md {
+  row-gap: 1.25rem; /* 20px */
+  width: 96.25rem; /* 1540px: 3 × 500 */
+}
+
+.exp-certs__grid--md li {
+  width: 31.25rem; /* 500px */
+}
+
+/* Webinar certificates have different shapes; Figma crops them to even rows */
+.exp-certs__grid--md .exp-tile {
+  height: 22.125rem; /* 354px */
+}
+
+.exp-certs__grid--md li:nth-child(n + 4) .exp-tile {
+  height: 20.875rem; /* 334px */
+}
+
+.exp-certs__grid--md .exp-tile img {
+  height: 100%;
+}
+
+.exp-certs__caption {
+  margin-bottom: 0.625rem; /* 10px */
+  color: var(--color-purple);
+  font-family: var(--font-heading);
+  font-size: 1.25rem; /* 20px */
+  font-weight: 500;
+  line-height: 2.8125rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.exp-certs__grid .exp-tile img {
+  height: auto;
+}
+
+/* Captioned certificates grow on hover */
+.exp-certs__grid--lg .exp-tile,
+.exp-certs__grid--sm .exp-tile {
+  position: relative;
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.exp-certs__grid--lg .exp-tile:hover,
+.exp-certs__grid--sm .exp-tile:hover {
+  z-index: 1;
+  transform: scale(1.15);
+  box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 25%);
+}
