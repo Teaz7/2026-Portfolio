@@ -1,7 +1,10 @@
 /* Figma: Home (1920px frame). Comments give the Figma px values. */
 
-/* Hero */
+/* Hero: stays in place once it reaches the top while Projects & Designs slides over it */
 .hero {
+  position: sticky;
+  top: 0;
+  z-index: 0;
   margin-top: 3.75rem; /* 60px below the nav */
   margin-bottom: 6rem; /* 96px above Projects */
 }
@@ -94,7 +97,26 @@
 }
 
 /* Projects & Designs */
+/* Slides over the sticky hero. The spacer after the section is the scroll distance
+   it stays pinned before Contact comes up (padding wouldn't work: sticky elements
+   can't move into their parent's padding). */
+.home-projects-track {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  transform: translateZ(0); /* own GPU layer, so it always paints above the hero */
+  background: var(--color-dark);
+}
+
+.home-projects-track::after {
+  content: '';
+  display: block;
+  height: 50svh;
+}
+
 .home-projects {
+  position: sticky;
+  top: 0;
   background: var(--color-dark);
   color: var(--color-white);
 }
@@ -103,6 +125,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: 100svh; /* fills the screen once it covers the hero */
   padding-top: 10.0625rem; /* 161px */
   padding-bottom: 10.125rem; /* 162px */
   text-align: center;
@@ -146,4 +170,30 @@
 .home-projects__icons img {
   width: auto;
   max-width: none;
+}
+
+/* Page-load entrance (keyframes in IntroOverlay.css, delays set inline in Home.jsx) */
+.hero--intro .hero__bio {
+  animation: intro-wipe 1000ms var(--ease-out-strong) backwards;
+}
+
+.hero--intro .hero__photo {
+  animation: intro-slide-left 900ms var(--ease-out-strong) backwards;
+}
+
+.hero--intro .hero__tag-row > li,
+.hero--intro .hero__resume,
+.hero--intro .hero__socials > li {
+  animation: intro-rise 550ms var(--ease-out-strong) backwards;
+}
+
+/* Projects & Designs reveal (delays set inline in Home.jsx) */
+.home-projects--armed .home-projects__button,
+.home-projects--armed .home-projects__icons > li {
+  opacity: 0;
+}
+
+.home-projects--play .home-projects__button,
+.home-projects--play .home-projects__icons > li {
+  animation: intro-rise 550ms var(--ease-out-strong) backwards;
 }

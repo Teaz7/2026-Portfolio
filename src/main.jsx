@@ -15,6 +15,10 @@ import '@fontsource/inter/800.css'
 import './index.css'
 import App from './App.jsx'
 
+// A refresh always starts at the top (the browser would otherwise restore the
+// old scroll position, landing mid-page under the intro)
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>

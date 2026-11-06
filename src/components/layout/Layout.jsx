@@ -1,10 +1,12 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { ReactLenis, useLenis } from 'lenis/react'
 import 'lenis/dist/lenis.css'
 import Navbar from './Navbar.jsx'
 import ContactSection from './ContactSection.jsx'
 import Cursor from './Cursor.jsx'
+import IntroOverlay from '../intro/IntroOverlay.jsx'
+import { leaveFirstPage } from '../../utils/intro.js'
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -22,6 +24,12 @@ const lenisOptions = {
 function ScrollManager() {
   const { pathname, hash } = useLocation()
   const lenis = useLenis()
+  const firstPath = useRef(pathname)
+
+  // The page-load intro only plays on the first page visited
+  useEffect(() => {
+    if (pathname !== firstPath.current) leaveFirstPage()
+  }, [pathname])
 
   useEffect(() => {
     if (!lenis) return
@@ -45,6 +53,7 @@ function Layout() {
         <Outlet />
       </main>
       <ContactSection />
+      <IntroOverlay />
       <Cursor />
     </ReactLenis>
   )

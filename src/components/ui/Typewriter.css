@@ -1,0 +1,22 @@
+.typewriter__rest {
+  visibility: hidden;
+}
+
+/* Zero-width so the text never moves while the caret travels */
+.typewriter__caret {
+  position: relative;
+  display: inline-block;
+  width: 0;
+  height: 1em;
+  vertical-align: -0.12em;
+}
+
+.typewriter__caret::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0.04em;
+  width: max(2px, 0.06em);
+  background: currentColor;
+}

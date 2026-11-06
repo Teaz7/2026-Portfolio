@@ -4,12 +4,29 @@ import Container from '../ui/Container.jsx'
 import Button from '../ui/Button.jsx'
 import SectionLabel from '../ui/SectionLabel.jsx'
 import MaskIcon from '../ui/MaskIcon.jsx'
+import Typewriter from '../ui/Typewriter.jsx'
+import { revealDelay, useScrollReveal } from '../../hooks/useScrollReveal.js'
 import { site } from '../../data/site.js'
 import linkedinIcon from '../../assets/icons/linkedin.svg'
 import githubIcon from '../../assets/icons/github.svg'
 import './ContactSection.css'
 
 const COPIED_DURATION = 2000
+
+/*
+  Reveal timeline, in ms after the section scrolls into view: the diamond comes in
+  as a square and turns, "Contact" and "Let's Connect!" type, the links wipe in,
+  the pitch fades in, the buttons slide in from the right, then the availability.
+*/
+const LABEL = 'Contact'
+const HEADING = 'Let’s Connect!'
+const labelTyping = { delay: 300, speed: 45 }
+const headingTyping = { delay: 700, speed: 45 }
+const LINKS_START = headingTyping.delay + HEADING.length * headingTyping.speed + 50
+const PITCH_START = LINKS_START + 200
+const BUTTONS_START = PITCH_START + 250
+const BUTTON_STEP = 110
+const AVAILABILITY_START = BUTTONS_START + BUTTON_STEP + 400
 
 // Envelope and check stacked in one spot so they can cross-fade
 function CopyIcon({ className }) {
@@ -42,6 +59,10 @@ function ContactSection() {
   const { linkedin, github } = site.links
   const [copied, setCopied] = useState(false)
   const copiedTimer = useRef(null)
+  // Plays when the section's top is 60% down the screen; resets once it's scrolled
+  // back off the bottom, so it replays next time
+  const { ref, phase, run } = useScrollReveal({ playAt: 0.6, resetAt: 1 })
+  const typing = { play: phase !== 'done', active: phase === 'play' }
 
   useEffect(() => () => clearTimeout(copiedTimer.current), [])
 
@@ -54,12 +75,16 @@ function ContactSection() {
   }
 
   return (
-    <footer id="contact" className="contact">
+    <footer ref={ref} id="contact" className={`contact contact--${phase}`}>
       <Container className="contact__inner">
         <div className="contact__main">
-          <SectionLabel tone="light">Contact</SectionLabel>
-          <p className="contact__heading">Let’s Connect!</p>
-          <ul className="contact__links">
+          <SectionLabel tone="light">
+            <Typewriter key={run} text={LABEL} {...typing} {...labelTyping} />
+          </SectionLabel>
+          <p className="contact__heading">
+            <Typewriter key={run} text={HEADING} {...typing} {...headingTyping} />
+          </p>
+          <ul className="contact__links" style={revealDelay(LINKS_START)}>
             <li>
               <a href={linkedin.href} target="_blank" rel="noreferrer">
                 <MaskIcon src={linkedinIcon} size="1.375rem" />
@@ -76,7 +101,7 @@ function ContactSection() {
         </div>
 
         <div className="contact__aside">
-          <p className="contact__pitch">
+          <p className="contact__pitch" style={revealDelay(PITCH_START)}>
             I’m currently looking for an OJT opportunity in software development. Feel free to
             reach out.
           </p>
@@ -86,7 +111,8 @@ function ContactSection() {
               size="md"
               shape="soft"
               icon={CopyIcon}
-              className={copied ? 'is-copied' : undefined}
+              className={`contact__button${copied ? ' is-copied' : ''}`}
+              style={revealDelay(BUTTONS_START)}
               onClick={copyEmail}
               aria-label={`Copy email address ${site.email}`}
             >
@@ -106,11 +132,13 @@ function ContactSection() {
               size="md"
               shape="soft"
               icon={Download}
+              className="contact__button"
+              style={revealDelay(BUTTONS_START + BUTTON_STEP)}
             >
               Download Resume
             </Button>
           </div>
-          <p className="contact__availability">{site.availability}</p>
+          <p className="contact__availability" style={revealDelay(AVAILABILITY_START)}>{site.availability}</p>
         </div>
       </Container>
 

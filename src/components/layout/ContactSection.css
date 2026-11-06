@@ -109,3 +109,29 @@
 .contact__copyright {
   margin-top: 9.5rem;
 }
+
+/* Scroll reveal (keyframes in IntroOverlay.css, delays set inline in ContactSection.jsx) */
+.contact--armed .section-label__diamond,
+.contact--armed .contact__links,
+.contact--armed .contact__pitch,
+.contact--armed .contact__button,
+.contact--armed .contact__availability {
+  opacity: 0;
+}
+
+.contact--play .section-label__diamond {
+  animation: intro-diamond 700ms var(--ease-out-strong) backwards;
+}
+
+.contact--play .contact__links {
+  animation: intro-wipe 900ms var(--ease-out-strong) backwards;
+}
+
+.contact--play .contact__pitch,
+.contact--play .contact__availability {
+  animation: intro-fade 600ms ease-out backwards;
+}
+
+.contact--play .contact__button {
+  animation: intro-slide-left 600ms var(--ease-out-strong) backwards;
+}

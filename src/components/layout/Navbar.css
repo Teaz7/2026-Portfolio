@@ -80,3 +80,9 @@
   border-radius: 0.625rem;
   background: var(--color-purple);
 }
+
+/* Page-load entrance (delays set inline in Navbar.jsx) */
+.navbar--intro .navbar__brand,
+.navbar--intro .navbar__links > li {
+  animation: intro-drop 550ms var(--ease-out-strong) backwards;
+}

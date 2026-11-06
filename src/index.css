@@ -50,6 +50,10 @@
   /* All hover / click animations */
   --transition: 250ms ease-out;
   --transition-slow: 300ms ease-out;
+
+  /* Page-load intro */
+  --ease-out-strong: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-strong: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 /* Smooth scrolling is handled by Lenis (components/layout/Layout.jsx) */
