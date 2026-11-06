@@ -1,0 +1,136 @@
+/* Figma: Projects (1920px frame). Comments give the Figma px values. */
+
+/* Header */
+.projects-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3.75rem; /* 60px below the nav */
+}
+
+.projects-header__title {
+  font-size: 9.125rem; /* 146px */
+  font-weight: 800;
+  line-height: 1.5;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Group labels: "◆ DEVELOPED PROJECTS" */
+.projects-group-label {
+  padding-top: 3.125rem; /* 50px */
+}
+
+/* Project */
+.project {
+  padding-top: 3.125rem; /* 50px */
+  padding-bottom: 3.125rem;
+}
+
+/* The last carousel runs straight into the Contact section */
+.projects-page > .project:last-child {
+  padding-bottom: 0;
+}
+
+.project__main {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: 6.25rem; /* 100px above the carousel */
+}
+
+.project__content {
+  width: 76.375rem; /* 1222px */
+}
+
+/* Title and tags stay on one line, like Figma (may run past the 1222px column) */
+.project__head {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem; /* 10px */
+  width: max-content;
+}
+
+.project__head .tag-list {
+  flex-wrap: nowrap;
+}
+
+.project__title {
+  font-size: 4.75rem; /* 76px */
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.project__intro {
+  color: var(--color-purple);
+  font-family: var(--font-heading);
+  font-size: 1.875rem; /* 30px */
+  line-height: 2.8125rem; /* 45px */
+}
+
+.project__bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* 20px */
+  width: 70rem; /* 1120px */
+  margin: 2.1875rem 0 0; /* 35px */
+  padding: 0;
+  list-style: none;
+  font-size: 2rem; /* 32px */
+  line-height: 2.8125rem; /* 45px */
+}
+
+.project__bullets li {
+  position: relative;
+  padding-left: 3.5625rem; /* 57px */
+}
+
+/* Bullets Figma keeps on one line even past the 1120px width */
+.project__bullets li.is-nowrap {
+  white-space: nowrap;
+}
+
+/* 15px rounded diamond, centered on the first line */
+.project__bullets li::before {
+  content: '';
+  position: absolute;
+  top: 0.9375rem;
+  left: 0.55rem;
+  width: 0.9375rem;
+  height: 0.9375rem;
+  border-radius: 3px;
+  background: var(--color-purple);
+  transform: rotate(45deg);
+}
+
+/* Sidebar: Context / Roles / Scope */
+.project__side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.875rem; /* 30px */
+  width: 26.375rem; /* 422px */
+  margin: 4.9375rem 0 0; /* 79px */
+}
+
+.project__side-item {
+  border-top: 1px solid var(--color-dark);
+}
+
+.project__side-item dt {
+  color: var(--color-purple);
+  font-size: 1.25rem; /* 20px */
+  line-height: 2.8125rem;
+  text-transform: uppercase;
+}
+
+.project__side-item dd {
+  margin: 0;
+  font-size: 2rem; /* 32px */
+  font-weight: 600;
+  line-height: 2.8125rem;
+}
+
+.project__side-item dd.is-compact {
+  font-size: 1.875rem; /* 30px */
+}

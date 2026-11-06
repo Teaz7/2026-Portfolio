@@ -126,14 +126,22 @@ function ComponentsPreview() {
         <Container>
           <h2 className="preview-group__title">Carousel: phone screens (4 per slide)</h2>
         </Container>
-        <Carousel label="AiBreCare" slides={chunk(aibrecare, 4)} accent="var(--color-aibrecare)" />
+        <Carousel
+          label="AiBreCare"
+          slides={chunk(aibrecare, 4)}
+          width="78.625rem"
+          height="37.5rem"
+          accent="var(--color-aibrecare)"
+        />
         <Container>
-          <h2 className="preview-group__title">Carousel: web screens (1 per slide)</h2>
+          <h2 className="preview-group__title">Carousel: web screens (1 per slide, with peek)</h2>
         </Container>
         <Carousel
           label="Tibiao Bakery Web"
           slides={chunk(tibiao, 1)}
-          height="35rem"
+          width="68.75rem"
+          height="31.25rem"
+          slideWidth="56.0625rem"
           accent="var(--color-tibiao)"
         />
       </section>

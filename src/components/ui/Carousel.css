@@ -1,20 +1,33 @@
+/* Figma: project carousels — 95px arrows, 30px from a fixed window, screens 50px apart */
 .carousel {
+  --carousel-gap: 3.125rem; /* 50px between screens and slides */
+
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-6);
-  padding: var(--space-10) var(--page-margin);
+  gap: 1.875rem; /* 30px */
+  padding: 4.375rem var(--page-margin); /* 70px */
   background: var(--color-dark);
 }
 
 .carousel__viewport {
-  flex: 0 1 85rem;
-  min-width: 0;
+  width: var(--carousel-width);
+  height: var(--carousel-height);
+  flex-shrink: 0;
   overflow: hidden;
 }
 
+/* Centers the current slide; with a narrower slide the neighbors peek in at the edges */
 .carousel__track {
   display: flex;
+  gap: var(--carousel-gap);
+  height: 100%;
+  transform: translateX(
+    calc(
+      (var(--carousel-width) - var(--carousel-slide)) / 2 - var(--carousel-position) *
+        (var(--carousel-slide) + var(--carousel-gap))
+    )
+  );
   transition: transform var(--transition-slow);
 }
 
@@ -30,26 +43,38 @@
 
 .carousel__slide {
   display: flex;
-  flex: 0 0 100%;
+  flex: 0 0 var(--carousel-slide);
   justify-content: center;
-  gap: var(--space-6);
-  height: var(--carousel-height);
+  gap: var(--carousel-gap);
+  height: 100%;
 }
 
-.carousel__slide img {
+/* Phone and web screens: full window height, natural width */
+.carousel--fit-height .carousel__slide img {
   height: 100%;
   width: auto;
   min-width: 0;
-  object-fit: contain;
-  border-radius: var(--radius-sm);
 }
 
+/* Page mockups: share the slide width, top aligned */
+.carousel--fit-width .carousel__slide {
+  align-items: flex-start;
+}
+
+.carousel--fit-width .carousel__slide img {
+  flex: 1 1 0;
+  min-width: 0;
+  height: auto;
+}
+
+/* Arrows: default → hover (accent arrow) → click (accent circle, white arrow) */
 .carousel__arrow {
   display: grid;
   place-items: center;
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 5.9375rem; /* 95px */
+  height: 5.9375rem;
   flex-shrink: 0;
+  padding: 0;
   border: none;
   border-radius: 50%;
   background: var(--color-white);
@@ -59,7 +84,6 @@
     color var(--transition-slow);
 }
 
-/* default → hover (accent arrow) → click (accent circle, white arrow) */
 .carousel__arrow:hover {
   color: var(--carousel-accent, var(--color-purple));
 }
@@ -71,6 +95,10 @@
 }
 
 .carousel__arrow svg {
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 2.5417rem; /* 40.67px */
+  height: 2.5417rem;
+}
+
+.carousel__arrow--next svg {
+  transform: rotate(180deg);
 }
