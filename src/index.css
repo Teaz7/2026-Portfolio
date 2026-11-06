@@ -59,6 +59,19 @@
 /* Smooth scrolling is handled by Lenis (components/layout/Layout.jsx) */
 html {
   font-size: clamp(10px, calc(100vw / 120), 16px);
+  /* No scroll anchoring: Chrome nudging the scroll position while content animates
+     fights Lenis's smooth scrolls (back to top would stall partway) */
+  overflow-anchor: none;
+}
+
+/* No visible scrollbars anywhere (scrolling still works). Also keeps 100vw equal
+   to the visible width, so the layout never overflows sideways. */
+* {
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
 }
 
 *,
@@ -69,6 +82,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: clip; /* never scroll sideways (clip keeps sticky elements working) */
   background: var(--color-white);
   color: var(--color-text);
   font-family: var(--font-body);

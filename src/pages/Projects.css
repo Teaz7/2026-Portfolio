@@ -160,7 +160,7 @@
 .project__track::after {
   content: '';
   display: block;
-  height: 70svh;
+  height: 50svh; /* same short pin as Home */
 }
 
 .project__stage {
@@ -170,32 +170,26 @@
   min-height: 100svh;
 }
 
-/* Scroll-linked (--enter 0 → 1 from useCoverProgress, reversed when scrolling back
-   up): the screens slide up from the bottom first, then both arrows rise together.
-   Each part's progress is eased in-out (smoothstep: p² × (3 − 2p)). */
 .project__carousel {
-  --screens-linear: clamp(0, calc(var(--enter, 1) / 0.7), 1);
-  --arrows-linear: clamp(0, calc((var(--enter, 1) - 0.55) / 0.45), 1);
-  --screens: calc(
-    var(--screens-linear) * var(--screens-linear) * (3 - 2 * var(--screens-linear))
-  );
-  --arrows: calc(var(--arrows-linear) * var(--arrows-linear) * (3 - 2 * var(--arrows-linear)));
-
   width: 100%;
 }
 
-/* will-change keeps these on their own GPU layers: moved without repainting, so
-   no faint copies of the screen edges are left behind while scrolling */
-.project__carousel .carousel__viewport {
-  opacity: var(--screens);
-  translate: 0 calc((1 - var(--screens)) * 50svh);
-  will-change: translate, opacity;
+/* Once the band covers the screen: the screens slide up from the bottom (ease in-out),
+   then both arrows rise together. --band-wait: extra delay if something above is
+   still animating. */
+.project__track--armed :is(.carousel__viewport, .carousel__arrow) {
+  opacity: 0;
 }
 
-.project__carousel .carousel__arrow {
-  opacity: var(--arrows);
-  translate: 0 calc((1 - var(--arrows)) * 3rem);
-  will-change: translate, opacity;
+.project__track--play .carousel__viewport {
+  --rise-from: 40svh;
+  animation: intro-rise-far 900ms var(--ease-in-out-strong) backwards;
+  animation-delay: var(--band-wait, 0ms);
+}
+
+.project__track--play .carousel__arrow {
+  animation: intro-rise 500ms var(--ease-out-strong) backwards;
+  animation-delay: calc(var(--band-wait, 0ms) + 700ms);
 }
 
 /* Content reveal (keyframes in IntroOverlay.css, delays set inline in Projects.jsx) */

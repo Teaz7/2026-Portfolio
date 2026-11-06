@@ -5,9 +5,9 @@ import Chip from '../components/ui/Chip.jsx'
 import SectionLabel from '../components/ui/SectionLabel.jsx'
 import Carousel from '../components/ui/Carousel.jsx'
 import Typewriter from '../components/ui/Typewriter.jsx'
-import { useDealOffsets, usePageEntrance } from '../hooks/usePageEntrance.js'
+import { useDealOffsets, useIntroSlideUp, usePageEntrance } from '../hooks/usePageEntrance.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
-import { useCoverProgress, useStickyFit } from '../hooks/useCover.js'
+import { useStickyFit } from '../hooks/useCover.js'
 import { stagger } from '../utils/intro.js'
 import { projectGroups, projects } from '../data/projects.js'
 import { chunk, getImages } from '../utils/images.js'
@@ -34,7 +34,6 @@ const TITLE_SPEED = 40
 const TAG_STEP = 90
 const BULLET_STEP = 170
 const SIDE_STEP = 150
-const CAROUSEL_ENTER = 0.3 // carousel comes in over this much scrolling (screen heights)
 
 function projectTimeline(name) {
   const tags = name.length * TITLE_SPEED + 50
@@ -62,12 +61,18 @@ function ProjectSection({ project }) {
   const delay = (ms) => ({ animationDelay: `${wait + ms}ms` })
   const tagsRef = useDealOffsets()
 
-  // The content stays in place while the carousel's black band slides over it
-  const trackRef = useRef(null)
+  // The content stays in place while the carousel's black band slides over it. Like
+  // Home: once the band covers the screen the carousel plays in (screens, then
+  // arrows); it resets when scrolled back up until the band is mostly off-screen.
   const stageRef = useRef(null)
   useStickyFit(mainRef)
   useStickyFit(stageRef)
-  useCoverProgress(trackRef, CAROUSEL_ENTER)
+  const {
+    ref: trackRef,
+    phase: bandPhase,
+    wait: bandWait,
+  } = useScrollReveal({ playAt: 0.05, resetAt: 0.7 })
+  useIntroSlideUp(trackRef) // on smaller screens, waits below until the sweep is gone
 
   return (
     <section
@@ -134,7 +139,11 @@ function ProjectSection({ project }) {
       </Container>
 
       {/* Black band: covers the screen, stays pinned while the carousel comes in */}
-      <div ref={trackRef} className="project__track">
+      <div
+        ref={trackRef}
+        className={`project__track project__track--${bandPhase}`}
+        style={{ '--band-wait': `${bandWait}ms` }}
+      >
         <div ref={stageRef} className="project__stage">
           <div className="project__carousel">
             <Carousel

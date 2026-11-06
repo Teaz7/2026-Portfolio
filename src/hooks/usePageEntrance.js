@@ -1,5 +1,11 @@
 import { useLayoutEffect, useRef, useState } from 'react'
-import { INTRO_DELAY, INTRO_ENABLED, holdRevealsFor, playsIntro } from '../utils/intro.js'
+import {
+  INTRO_DELAY,
+  INTRO_ENABLED,
+  SWEEP_DURATION,
+  holdRevealsFor,
+  playsIntro,
+} from '../utils/intro.js'
 
 /*
   Page header entrance timing. Returns when the entrance should start (ms):
@@ -29,6 +35,7 @@ export function useDealOffsets(firstOffset = '-2rem') {
   const listRef = useRef(null)
 
   useLayoutEffect(() => {
+    if (!listRef.current) return
     const items = [...listRef.current.children]
     items.forEach((item, index) => {
       const previous = items[index - 1]
@@ -41,4 +48,29 @@ export function useDealOffsets(firstOffset = '-2rem') {
   }, [firstOffset])
 
   return listRef
+}
+
+/*
+  Dark sections that already show at the bottom of the screen on a first load
+  (e.g. About's history on shorter screens) start pushed below the screen, so the
+  page under the purple sweep is plain white, then slide up once the sweep is gone.
+*/
+export function useIntroSlideUp(ref) {
+  useLayoutEffect(() => {
+    const element = ref.current
+    if (!element || !INTRO_ENABLED || !playsIntro()) return
+    const top = element.getBoundingClientRect().top
+    if (top >= window.innerHeight) return
+
+    element.style.setProperty('--slide-from', `${Math.ceil(window.innerHeight - top)}px`)
+    element.style.setProperty('--slide-delay', `${SWEEP_DURATION}ms`)
+    element.classList.add('intro-slide-up')
+    const onEnd = (event) => {
+      if (event.target !== element || event.animationName !== 'intro-slide-up') return
+      element.classList.remove('intro-slide-up')
+      element.removeEventListener('animationend', onEnd)
+    }
+    element.addEventListener('animationend', onEnd)
+    return () => element.removeEventListener('animationend', onEnd)
+  }, [ref])
 }

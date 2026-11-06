@@ -6,18 +6,15 @@ import Navbar from './Navbar.jsx'
 import ContactSection from './ContactSection.jsx'
 import Cursor from './Cursor.jsx'
 import IntroOverlay from '../intro/IntroOverlay.jsx'
+import ScrollTopButton from './ScrollTopButton.jsx'
 import { leaveFirstPage } from '../../utils/intro.js'
-
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-// Ease in-out for jumps (anchor links like #contact, project chips)
-const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2)
+import { easeInOutCubic, reduceMotion } from './scrolling.js'
+import { priorityScrollTo } from '../../utils/scrollPriority.js'
 
 // Smooth scrolling (Lenis), same approach as yeahright.co
 const lenisOptions = {
   lerp: 0.08, // mouse wheel smoothing: lower = slower, softer
   smoothWheel: !reduceMotion,
-  anchors: { duration: 1.2, easing: easeInOutCubic },
 }
 
 // New page: start at the top, or jump to the #section in the link
@@ -34,31 +31,25 @@ function ScrollManager() {
   useEffect(() => {
     if (!lenis) return
     if (hash) {
-      lenis.scrollTo(hash, { duration: 1.2, easing: easeInOutCubic, immediate: reduceMotion })
+      priorityScrollTo(lenis, hash, { duration: 1.2, easing: easeInOutCubic, immediate: reduceMotion })
     } else {
       lenis.scrollTo(0, { immediate: true })
     }
   }, [lenis, pathname, hash])
 
-  return null
-}
-
-// Dragging the scrollbar (or any other native scroll) while a wheel scroll is still
-// gliding: Lenis would keep pulling the page back toward the old wheel target. A
-// scroll position Lenis didn't set means someone else is scrolling, so drop the glide.
-function ScrollbarGrab() {
-  const lenis = useLenis()
-
+  // Same-page #links (navbar Contact, jump chips) glide there with priority too
   useEffect(() => {
     if (!lenis) return
-    const onScroll = () => {
-      if (!lenis.isScrolling || lenis.isScrolling === 'native') return
-      if (Math.abs(window.scrollY - lenis.animatedScroll) > 2) {
-        lenis.scrollTo(window.scrollY, { immediate: true, force: true })
-      }
+    const onClick = (event) => {
+      const link = event.target.closest('a[href^="#"]')
+      if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey) return
+      const target = document.querySelector(link.getAttribute('href'))
+      if (!target) return
+      event.preventDefault()
+      priorityScrollTo(lenis, target, { duration: 1.2, easing: easeInOutCubic, immediate: reduceMotion })
     }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    document.addEventListener('click', onClick)
+    return () => document.removeEventListener('click', onClick)
   }, [lenis])
 
   return null
@@ -69,12 +60,12 @@ function Layout() {
   return (
     <ReactLenis root options={lenisOptions}>
       <ScrollManager />
-      <ScrollbarGrab />
       <Navbar />
       <main>
         <Outlet />
       </main>
       <ContactSection />
+      <ScrollTopButton />
       <IntroOverlay />
       <Cursor />
     </ReactLenis>

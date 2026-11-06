@@ -90,6 +90,46 @@
   }
 }
 
+/* Lines drawing from left to right */
+@keyframes intro-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+/* Clip from one inset to another (set per element as --clip-from / --clip-to) */
+@keyframes intro-clip {
+  from {
+    clip-path: var(--clip-from);
+  }
+  to {
+    clip-path: var(--clip-to);
+  }
+}
+
+/* Bigger rise for band content; distance from --rise-from (uses `translate`, so it
+   doesn't clash with hover transforms) */
+@keyframes intro-rise-far {
+  from {
+    opacity: 0;
+    translate: 0 var(--rise-from, 6rem);
+  }
+}
+
+/* Dark section showing at the bottom on load: slides up after the sweep
+   (useIntroSlideUp sets --slide-from / --slide-delay). Uses `translate`, so it
+   doesn't replace the element's own transform. */
+.intro-slide-up {
+  animation: intro-slide-up 900ms var(--ease-out-strong) backwards;
+  animation-delay: var(--slide-delay, 1500ms);
+}
+
+@keyframes intro-slide-up {
+  from {
+    translate: 0 var(--slide-from, 100vh);
+  }
+}
+
 @keyframes intro-fade {
   from {
     opacity: 0;

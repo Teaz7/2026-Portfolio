@@ -179,30 +179,57 @@
   font-size: 1.5rem; /* 24px */
 }
 
-/* Dark gallery bands */
+/* Dark gallery bands: slide over the entry text (which stays in place, top set by
+   useStickyFit), cover the screen, then stay pinned for the spacer's height */
+.exp-entry__main {
+  position: sticky;
+  z-index: 0;
+}
+
 .exp-band {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  transform: translateZ(0); /* own GPU layer, so it always paints above the text */
   margin-top: 4.375rem; /* 70px */
-  padding-block: 3.125rem; /* 50px */
   background: var(--color-dark);
   color: var(--color-white);
+}
+
+.exp-band::after {
+  content: '';
+  display: block;
+  height: 50svh; /* same short pin as Home */
+}
+
+.exp-stage {
+  position: sticky; /* top set by useStickyFit */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+  padding-block: 3.125rem; /* 50px */
+}
+
+/* Once the band covers the screen, the photos rise in one after another (--i is
+   each photo's order, --band-wait extra delay if something above is still animating) */
+.exp-band--armed .exp-stage :is(.exp-tile, figcaption) {
+  opacity: 0;
+}
+
+.exp-band--play .exp-stage :is(.exp-tile, figcaption) {
+  animation: intro-rise-far 700ms var(--ease-out-strong) backwards;
+  animation-delay: calc(var(--band-wait, 0ms) + var(--i, 0) * 90ms);
 }
 
 .exp-entry--webinar .exp-band {
   margin-top: 3.125rem; /* 50px */
 }
 
-/* Clickable image (opens the lightbox) */
+/* Image in a gallery or certificate grid */
 .exp-tile {
   display: block;
-  padding: 0;
-  border: none;
-  background: none;
   overflow: hidden;
-  transition: transform var(--transition);
-}
-
-.exp-tile:hover {
-  transform: translateY(-4px);
 }
 
 .exp-tile img {
@@ -469,4 +496,96 @@
   z-index: 1;
   transform: scale(1.15);
   box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 25%);
+}
+
+/* Tags cover the next one while they deal out */
+.exp-head__tags .tag {
+  background: var(--color-white);
+}
+
+.exp-bullets li > span {
+  display: block;
+}
+
+/* Entry text reveal (keyframes in IntroOverlay.css, delays set inline) */
+.exp-entry--armed :is(
+    .exp-head__tags > li,
+    .exp-head__category,
+    .exp-head__event,
+    .exp-intro,
+    .exp-bullets li > span,
+    .exp-side__item
+  ) {
+  opacity: 0;
+}
+
+/* Pseudo-elements can't go inside :is() */
+.exp-entry--armed .exp-bullets li::before {
+  opacity: 0;
+}
+
+.exp-entry--play .exp-head__tags > li {
+  position: relative;
+  animation: intro-deal 500ms var(--ease-out-strong) backwards;
+}
+
+.exp-entry--play :is(.exp-head__category, .exp-head__event) {
+  animation: intro-slide-right 500ms var(--ease-out-strong) backwards;
+}
+
+.exp-entry--play .exp-intro {
+  animation: intro-wipe 1000ms var(--ease-out-strong) backwards;
+}
+
+.exp-entry--play .exp-bullets li::before {
+  animation: intro-bullet 600ms var(--ease-out-strong) backwards;
+  animation-delay: var(--bullet-delay);
+}
+
+.exp-entry--play .exp-bullets li > span {
+  animation: intro-slide-right 550ms var(--ease-out-strong) backwards;
+  animation-delay: calc(var(--bullet-delay) + 250ms);
+}
+
+.exp-entry--play .exp-side__item {
+  animation: intro-slide-left 600ms var(--ease-out-strong) backwards;
+}
+
+/* Awards: rows from the left, notes from the right */
+.exp-awards--armed :is(.exp-awards__row, .exp-awards__note) {
+  opacity: 0;
+}
+
+.exp-awards--play .exp-awards__row {
+  animation: intro-slide-right 600ms var(--ease-out-strong) backwards;
+}
+
+.exp-awards--play .exp-awards__note {
+  animation: intro-slide-left 600ms var(--ease-out-strong) backwards;
+}
+
+/* Certificates rise in one after another (the title types) */
+.exp-certs--armed .exp-certs__grid > li {
+  opacity: 0;
+}
+
+.exp-certs--play .exp-certs__grid > li {
+  animation: intro-rise 550ms var(--ease-out-strong) backwards;
+}
+
+/* Gallery photos and webinar certificates grow a little on hover (the captioned
+   certificates above grow more) */
+.exp-stage .exp-tile,
+.exp-certs__grid--md .exp-tile {
+  position: relative;
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.exp-stage .exp-tile:hover,
+.exp-certs__grid--md .exp-tile:hover {
+  z-index: 1;
+  transform: scale(1.05);
+  box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 30%);
 }

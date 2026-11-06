@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ArrowRight, Download } from 'lucide-react'
 import Container from '../components/ui/Container.jsx'
 import Button from '../components/ui/Button.jsx'
@@ -8,6 +8,7 @@ import { site } from '../data/site.js'
 import { getImage } from '../utils/images.js'
 import { INTRO_DELAY, introDelay, playsIntro, stagger } from '../utils/intro.js'
 import { revealDelay, useScrollReveal } from '../hooks/useScrollReveal.js'
+import { useIntroSlideUp } from '../hooks/usePageEntrance.js'
 import linkedinIcon from '../assets/icons/home/linkedin-purple.svg'
 import githubIcon from '../assets/icons/home/github-purple.svg'
 import facebookIcon from '../assets/icons/home/facebook-purple.svg'
@@ -105,6 +106,11 @@ function Home() {
     run: projectsRun,
   } = useScrollReveal({ playAt: 0.05, resetAt: 0.7 })
 
+  // On a first load (smaller screens), the black section waits below the screen
+  // until the sweep is gone
+  const trackRef = useRef(null)
+  useIntroSlideUp(trackRef)
+
   return (
     <>
       <Container
@@ -179,7 +185,7 @@ function Home() {
 
       {/* The track is taller than the section, so the section stays pinned for a
           short scroll before Contact comes up */}
-      <div className="home-projects-track">
+      <div ref={trackRef} className="home-projects-track">
         <section
           ref={projectsRef}
           className={`home-projects home-projects--${projectsReveal}`}

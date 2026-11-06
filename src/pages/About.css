@@ -74,10 +74,14 @@
 
 /* Dark history section */
 .about-history {
-  padding-top: 3.125rem; /* 50px */
-  padding-bottom: 3.125rem;
+  padding-bottom: 3.125rem; /* 50px */
   background: var(--color-dark);
   color: var(--color-white);
+}
+
+/* Timeline: room above the label so it doesn't sit right at the top edge */
+.about-history__stage {
+  padding-top: 7.5rem; /* 120px */
 }
 
 /* Timeline: a 1760×286 diagram, positioned like the Figma frame */
@@ -191,4 +195,70 @@
   flex-direction: column;
   gap: 1.875rem; /* 30px */
   margin-top: 1.875rem;
+}
+
+/* Stays in place (top set by useStickyFit) while the dark section slides over it */
+.about-intro {
+  position: sticky;
+  z-index: 0;
+}
+
+.about-history {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  transform: translateZ(0); /* own GPU layer, so it always paints above the intro */
+}
+
+/* Intro entrance (keyframes in IntroOverlay.css, delays set inline in About.jsx) */
+.about-intro--play .about-intro__text {
+  animation: intro-wipe 1000ms var(--ease-out-strong) backwards;
+}
+
+.about-intro--play .about-intro__photo {
+  animation: intro-slide-left 900ms var(--ease-out-strong) backwards;
+}
+
+.about-intro--play .about-tag-row > li {
+  animation: intro-rise 550ms var(--ease-out-strong) backwards;
+}
+
+/* Timeline reveal */
+.about-timeline--armed :is(.timeline__chip, .timeline__line, .timeline__arrow, .timeline__path) {
+  opacity: 0;
+}
+
+.about-timeline--play .timeline__chip {
+  animation: intro-slide-right 500ms var(--ease-out-strong) backwards;
+}
+
+.about-timeline--play .timeline__line {
+  animation: intro-draw 300ms ease-out backwards;
+}
+
+/* Each stretch of the path wipes open at the same speed (durations set inline) */
+.about-timeline--play .timeline__path--segment {
+  animation: intro-clip linear backwards;
+}
+
+.about-timeline--play .timeline__arrow {
+  animation: intro-slide-right 300ms ease-out backwards;
+}
+
+/* Story: paragraphs type in (Typewriter), then the button slides in */
+.about-story--armed .about-story__button {
+  opacity: 0;
+}
+
+.about-story--play .about-story__button {
+  animation: intro-slide-right 550ms var(--ease-out-strong) backwards;
+}
+
+/* Coursework: label types, then each row's tags slide in from the left */
+.about-courses--armed .about-coursework__row > li {
+  opacity: 0;
+}
+
+.about-courses--play .about-coursework__row > li {
+  animation: intro-slide-right 500ms var(--ease-out-strong) backwards;
 }

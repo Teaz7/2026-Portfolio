@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { isPriorityScroll } from '../../utils/scrollPriority.js'
 import './Cursor.css'
 
 /*
@@ -80,7 +81,9 @@ function Cursor() {
     }
 
     // Content moves under a still mouse while scrolling
-    const onScroll = () => setTarget(document.elementFromPoint(mouse.x, mouse.y))
+    const onScroll = () => {
+      if (!isPriorityScroll()) setTarget(document.elementFromPoint(mouse.x, mouse.y))
+    }
 
     const onMouseOut = (event) => {
       if (!event.relatedTarget) cursor.classList.add('cursor--away')

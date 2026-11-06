@@ -10,18 +10,41 @@ export const INTRO_ENABLED = !reduceMotion
 // When page content starts appearing (ms), as the purple panel slides away
 export const INTRO_DELAY = 1200
 
+// When the purple sweep has fully left the screen (ms), see IntroOverlay.css
+export const SWEEP_DURATION = 1500
+
 let onFirstPage = true
 
 /*
   Scroll reveals that trigger while something else is still animating in (the
-  sweep on load, a page header) wait until it's done. Starts as the sweep.
+  sweep on load, a page header, a section above) wait until it's done. A hold tied
+  to an element only counts while that element still reaches below the top quarter
+  of the screen, so scrolling past a section doesn't leave the next one waiting.
+  Starts as the sweep.
 */
-let holdUntil = INTRO_ENABLED ? performance.now() + INTRO_DELAY : 0
+let holds = INTRO_ENABLED ? [{ until: performance.now() + INTRO_DELAY, element: null }] : []
 
-export const holdRevealsFor = (ms) => {
-  holdUntil = Math.max(holdUntil, performance.now() + ms)
+export const holdRevealsFor = (ms, element = null) => {
+  holds.push({ until: performance.now() + ms, element })
 }
-export const revealWait = () => Math.max(0, Math.round(holdUntil - performance.now()))
+
+const onScreen = (element) => {
+  const { top, bottom } = element.getBoundingClientRect()
+  return bottom > window.innerHeight * 0.25 && top < window.innerHeight
+}
+
+// A section above holds back the next one by at most this much (page holds are uncapped)
+const MAX_SECTION_WAIT = 800
+
+export const revealWait = () => {
+  const now = performance.now()
+  holds = holds.filter(({ until }) => until > now)
+  const waits = holds.map(({ until, element }) => {
+    if (!element) return until - now
+    return onScreen(element) ? Math.min(until - now, MAX_SECTION_WAIT) : 0
+  })
+  return Math.round(Math.max(0, ...waits))
+}
 
 export const playsIntro = () => INTRO_ENABLED && onFirstPage
 export const leaveFirstPage = () => {

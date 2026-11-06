@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { isPriorityScroll } from '../../utils/scrollPriority.js'
 import './Typewriter.css'
 
 /*
@@ -17,7 +18,7 @@ function Typewriter({ text, delay = 0, speed = 40, play = true, active = true })
     const tick = (now) => {
       const elapsed = now - start
       const next = elapsed < 0 ? -1 : Math.min(text.length, Math.floor(elapsed / speed) + 1)
-      setCount(next)
+      if (!isPriorityScroll()) setCount(next) // back to top etc. come first
       if (next < text.length) frame = requestAnimationFrame(tick)
     }
     frame = requestAnimationFrame(tick)
