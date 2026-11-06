@@ -19,22 +19,11 @@
   z-index: 1000;
   pointer-events: none;
   color: var(--color-purple);
-  transition:
-    opacity var(--transition),
-    color var(--transition);
+  transition: opacity var(--transition);
 }
 
 .has-custom-cursor .cursor {
   display: block;
-}
-
-.cursor--light {
-  color: var(--color-white);
-}
-
-/* Inverts the colors underneath, so the cursor stays visible on same-color backgrounds */
-.cursor--blend {
-  mix-blend-mode: difference;
 }
 
 .cursor--away,
@@ -58,25 +47,70 @@
   transform: translate(-50%, -50%);
 }
 
+/* Shapes come from masks with a 1px soft edge: border-radius alone leaves the
+   backdrop effects below with jagged edges */
 .cursor__dot::before {
   width: 14px;
   height: 14px;
   background: currentColor;
+  -webkit-mask: radial-gradient(farthest-side, #000 calc(100% - 0.75px), transparent);
+  mask: radial-gradient(farthest-side, #000 calc(100% - 0.75px), transparent);
 }
 
+/* The ring is a filled circle cut down to a 2px band, so it can also use the
+   backdrop effects below */
 .cursor__ring::before {
   width: 36px;
   height: 36px;
-  border: 2px solid currentColor;
+  background: currentColor;
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2.75px),
+    #000 calc(100% - 2px),
+    #000 calc(100% - 0.75px),
+    transparent
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2.75px),
+    #000 calc(100% - 2px),
+    #000 calc(100% - 0.75px),
+    transparent
+  );
   transition:
     width var(--transition),
-    height var(--transition),
-    background-color var(--transition);
+    height var(--transition);
 }
 
 /* Over links and buttons */
 .cursor--hover .cursor__ring::before {
   width: 64px;
   height: 64px;
-  background: color-mix(in srgb, currentColor 15%, transparent);
+}
+
+.cursor__filters {
+  position: absolute;
+}
+
+/* Light surfaces (Chromium): purple, with text underneath showing through as white */
+.cursor--svg:not(.cursor--contrast) .cursor__dot::before,
+.cursor--svg:not(.cursor--contrast) .cursor__ring::before {
+  background: transparent;
+  -webkit-backdrop-filter: url(#cursor-light);
+  backdrop-filter: url(#cursor-light);
+}
+
+/* Off light surfaces: whatever is underneath becomes strict black/white, inverted.
+   Purple or dark backgrounds show a white cursor, and text under it turns black. */
+.cursor--contrast {
+  color: var(--color-white); /* fallback for browsers without backdrop-filter */
+}
+
+@supports (backdrop-filter: invert(1)) or (-webkit-backdrop-filter: invert(1)) {
+  .cursor--contrast .cursor__dot::before,
+  .cursor--contrast .cursor__ring::before {
+    background: transparent;
+    -webkit-backdrop-filter: grayscale(1) contrast(100) invert(1);
+    backdrop-filter: grayscale(1) contrast(100) invert(1);
+  }
 }

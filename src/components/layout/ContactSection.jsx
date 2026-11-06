@@ -54,7 +54,7 @@ function ContactSection() {
   }
 
   return (
-    <footer id="contact" className="contact" data-cursor="light">
+    <footer id="contact" className="contact">
       <Container className="contact__inner">
         <div className="contact__main">
           <SectionLabel tone="light">Contact</SectionLabel>

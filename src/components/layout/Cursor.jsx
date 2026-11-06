@@ -2,24 +2,28 @@ import { useEffect, useRef } from 'react'
 import './Cursor.css'
 
 /*
-  Custom cursor: a purple dot plus a ring that trails behind it.
+  Custom cursor: a dot plus a ring that trails behind it.
+  - On light backgrounds it's purple; text under it (purple or dark) shows as white.
+    This uses an SVG backdrop filter, which only Chromium browsers support, so
+    other browsers get a plain purple cursor there.
+  - On anything else (purple buttons, dark bands, the Contact section, photos) it
+    turns whatever is underneath into strict black/white and inverts it, so text
+    under the dot flips color (same technique as onform.studio)
   - The ring grows over links and buttons
-  - Turns white inside sections marked data-cursor="light" (purple sections)
-  - Switches to a blend mode (inverted colors) when it's the same color as the
-    background under it, e.g. over a purple button
   - Not used on touch screens; the normal text cursor shows in text fields
 */
 
 const INTERACTIVE = 'a, button, [role="button"], summary, label'
 const TEXT_FIELD = 'input, textarea, select, [contenteditable="true"]'
-const PURPLE = [148, 88, 188]
-const WHITE = [255, 255, 255]
-const RING_FOLLOW = 1 // 1 = no trail, lower = longer trail
-const SAME_COLOR_DISTANCE = 90
+const RING_FOLLOW = 0.4 // 1 = no trail, lower = longer trail
+const LIGHT_CHANNEL = 230 // every RGB channel at least this = light surface
+
+const supportsSvgBackdrop = () =>
+  Boolean(navigator.userAgentData?.brands?.some(({ brand }) => brand === 'Chromium'))
 
 const parseColor = (value) => {
   const [r, g, b, a = 1] = (value.match(/[\d.]+/g) ?? []).map(Number)
-  return r === undefined || a < 0.5 ? null : [r, g, b]
+  return r === undefined || a < 0.7 ? null : [r, g, b]
 }
 
 // First solid background color behind an element
@@ -28,10 +32,8 @@ const backgroundOf = (element) => {
     const color = parseColor(getComputedStyle(node).backgroundColor)
     if (color) return color
   }
-  return WHITE
+  return [255, 255, 255]
 }
-
-const distance = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2])
 
 function Cursor() {
   const cursorRef = useRef(null)
@@ -51,13 +53,12 @@ function Cursor() {
     let recheckTimer
 
     root.classList.add('has-custom-cursor')
+    cursor.classList.toggle('cursor--svg', supportsSvgBackdrop())
 
     const updateState = () => {
       if (!target) return
-      const light = Boolean(target.closest('[data-cursor="light"]'))
-      const blend = distance(backgroundOf(target), light ? WHITE : PURPLE) < SAME_COLOR_DISTANCE
-      cursor.classList.toggle('cursor--light', light || blend)
-      cursor.classList.toggle('cursor--blend', blend)
+      const lightSurface = backgroundOf(target).every((channel) => channel >= LIGHT_CHANNEL)
+      cursor.classList.toggle('cursor--contrast', !lightSurface)
       cursor.classList.toggle('cursor--hover', Boolean(target.closest(INTERACTIVE)))
       cursor.classList.toggle('cursor--hidden', Boolean(target.closest(TEXT_FIELD)))
     }
@@ -111,6 +112,20 @@ function Cursor() {
 
   return (
     <div ref={cursorRef} className="cursor cursor--away" aria-hidden="true">
+      {/* Light surfaces: light pixels -> purple, everything else (text) -> white */}
+      <svg className="cursor__filters" width="0" height="0">
+        <filter id="cursor-light" colorInterpolationFilters="sRGB">
+          <feColorMatrix
+            type="matrix"
+            values="0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0.2126 0.7152 0.0722 0 0  0 0 0 0 1"
+          />
+          <feComponentTransfer>
+            <feFuncR type="discrete" tableValues="1 1 1 1 0.5804" />
+            <feFuncG type="discrete" tableValues="1 1 1 1 0.3451" />
+            <feFuncB type="discrete" tableValues="1 1 1 1 0.7373" />
+          </feComponentTransfer>
+        </filter>
+      </svg>
       <span ref={ringRef} className="cursor__ring" />
       <span ref={dotRef} className="cursor__dot" />
     </div>

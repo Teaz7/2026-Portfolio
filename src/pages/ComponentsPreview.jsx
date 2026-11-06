@@ -80,7 +80,7 @@ function ComponentsPreview() {
             <Button icon={ArrowRight}>View My Projects</Button>
             <Button size="sm">Contact</Button>
           </div>
-          <div className="preview-row preview-row--purple" data-cursor="light">
+          <div className="preview-row preview-row--purple">
             <Button variant="light" size="md" shape="soft">
               tjlarroza@gmail.com
             </Button>
