@@ -1,0 +1,100 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 2px solid transparent;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition:
+    background-color var(--transition-slow),
+    border-color var(--transition-slow),
+    color var(--transition-slow);
+}
+
+/* Click color shows instantly on press, then eases out on release */
+.button:active {
+  transition-duration: 0s;
+}
+
+.button__icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+/* Variants: default → :hover → :active (pressed) */
+.button--primary {
+  border-color: var(--color-purple);
+  background: var(--color-purple);
+  color: var(--color-white);
+}
+
+.button--primary:hover {
+  background: var(--color-dark);
+}
+
+.button--primary:active {
+  background: transparent;
+  color: var(--color-purple);
+}
+
+/* Email button in the Contact section */
+.button--light {
+  background: var(--color-white);
+  color: var(--color-dark);
+}
+
+.button--light:hover {
+  color: var(--color-purple);
+}
+
+.button--light:active {
+  background: var(--color-dark);
+  color: var(--color-purple);
+}
+
+/* Download Resume in the Contact section */
+.button--dark {
+  background: var(--color-dark);
+  color: var(--color-white);
+}
+
+.button--dark:hover {
+  color: var(--color-purple);
+}
+
+.button--dark:active {
+  background: var(--color-white);
+  color: var(--color-purple);
+}
+
+/* Sizes */
+.button--sm {
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-heading);
+  font-size: var(--fs-md);
+  font-weight: 400;
+}
+
+.button--md {
+  padding: 1.125rem 1.25rem;
+  font-family: var(--font-heading);
+  font-size: var(--fs-md);
+}
+
+.button--lg {
+  padding: 1.25rem 2.375rem;
+  font-family: var(--font-body);
+  font-size: var(--fs-xl);
+}
+
+/* Shapes */
+.button--pill {
+  border-radius: var(--radius-pill);
+}
+
+.button--soft {
+  border-radius: var(--radius-sm);
+}

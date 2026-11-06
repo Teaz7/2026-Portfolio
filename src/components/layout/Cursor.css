@@ -1,0 +1,82 @@
+/* Hide the system cursor only when the custom one is running (mouse devices) */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+
+.has-custom-cursor :is(input, textarea, [contenteditable='true']) {
+  cursor: text !important;
+}
+
+.has-custom-cursor select {
+  cursor: default !important;
+}
+
+.cursor {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  color: var(--color-purple);
+  transition:
+    opacity var(--transition),
+    color var(--transition);
+}
+
+.has-custom-cursor .cursor {
+  display: block;
+}
+
+.cursor--light {
+  color: var(--color-white);
+}
+
+/* Inverts the colors underneath, so the cursor stays visible on same-color backgrounds */
+.cursor--blend {
+  mix-blend-mode: difference;
+}
+
+.cursor--away,
+.cursor--hidden {
+  opacity: 0;
+}
+
+.cursor__dot,
+.cursor__ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.cursor__dot::before,
+.cursor__ring::before {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cursor__dot::before {
+  width: 14px;
+  height: 14px;
+  background: currentColor;
+}
+
+.cursor__ring::before {
+  width: 36px;
+  height: 36px;
+  border: 2px solid currentColor;
+  transition:
+    width var(--transition),
+    height var(--transition),
+    background-color var(--transition);
+}
+
+/* Over links and buttons */
+.cursor--hover .cursor__ring::before {
+  width: 64px;
+  height: 64px;
+  background: color-mix(in srgb, currentColor 15%, transparent);
+}

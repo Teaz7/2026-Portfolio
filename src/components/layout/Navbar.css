@@ -1,0 +1,76 @@
+.navbar {
+  padding-block: 2.5rem;
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar__logo {
+  height: 2.75rem;
+  width: auto;
+}
+
+.navbar__titles {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-heading);
+  line-height: 1.1;
+}
+
+.navbar__title {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+
+.navbar__subtitle {
+  color: var(--color-purple);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar__link {
+  position: relative;
+  font-family: var(--font-heading);
+  font-size: var(--fs-md);
+  transition: color var(--transition);
+}
+
+.navbar__link:hover,
+.navbar__link.active {
+  color: var(--color-purple);
+}
+
+.navbar__link.active {
+  font-weight: 600;
+}
+
+/* Active page underline */
+.navbar__link.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.5rem;
+  height: 0.25rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-purple);
+}

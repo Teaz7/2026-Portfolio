@@ -1,0 +1,76 @@
+.carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-10) var(--page-margin);
+  background: var(--color-dark);
+}
+
+.carousel__viewport {
+  flex: 0 1 85rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.carousel__track {
+  display: flex;
+  transition: transform var(--transition-slow);
+}
+
+.carousel__track--instant {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel__track {
+    transition: none;
+  }
+}
+
+.carousel__slide {
+  display: flex;
+  flex: 0 0 100%;
+  justify-content: center;
+  gap: var(--space-6);
+  height: var(--carousel-height);
+}
+
+.carousel__slide img {
+  height: 100%;
+  width: auto;
+  min-width: 0;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.carousel__arrow {
+  display: grid;
+  place-items: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-dark);
+  transition:
+    background-color var(--transition-slow),
+    color var(--transition-slow);
+}
+
+/* default → hover (accent arrow) → click (accent circle, white arrow) */
+.carousel__arrow:hover {
+  color: var(--carousel-accent, var(--color-purple));
+}
+
+.carousel__arrow:active {
+  background: var(--carousel-accent, var(--color-purple));
+  color: var(--color-white);
+  transition-duration: 0s; /* instant on press, eases out on release */
+}
+
+.carousel__arrow svg {
+  width: 2.75rem;
+  height: 2.75rem;
+}
