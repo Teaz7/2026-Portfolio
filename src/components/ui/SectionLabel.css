@@ -1,21 +1,24 @@
+/* Figma: "◆ CONTACT", Inter ExtraBold 36/35 with a 31px rounded diamond */
 .section-label {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  font-family: var(--font-heading);
-  font-size: var(--fs-label);
-  font-weight: 700;
-  line-height: 1.2;
+  gap: 1.25rem;
+  font-family: var(--font-body);
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 2.1875rem;
   text-transform: uppercase;
 }
 
+/* 31px square turned 45°, spaced to fill its 44px diagonal */
 .section-label__diamond {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 1.931rem;
+  height: 1.931rem;
+  margin: 0.4rem;
   flex-shrink: 0;
-  border-radius: 0.25rem;
+  border-radius: 0.3125rem;
   background: currentColor;
-  transform: rotate(45deg) scale(0.85);
+  transform: rotate(45deg);
 }
 
 .section-label--dark {

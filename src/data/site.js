@@ -18,9 +18,10 @@ export const site = {
       label: 'github.com/Teaz7',
       href: 'https://github.com/Teaz7',
     },
-    // TODO: add Facebook and Instagram profile URLs
-    facebook: { label: 'Facebook', href: '#' },
-    instagram: { label: 'Instagram', href: '#' },
+    facebook: {
+      label: 'facebook.com/ImSleepyy',
+      href: 'https://www.facebook.com/ImSleepyy',
+    },
   },
 }
 

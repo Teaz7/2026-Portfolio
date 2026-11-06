@@ -1,5 +1,6 @@
+/* Figma: Nav Bar, 1760×80, 30px from the top */
 .navbar {
-  padding-block: 2.5rem;
+  padding-top: 1.875rem;
 }
 
 .navbar__inner {
@@ -7,6 +8,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
+  height: 5rem;
 }
 
 .navbar__brand {
@@ -16,32 +18,34 @@
 }
 
 .navbar__logo {
-  height: 2.75rem;
-  width: auto;
+  width: 2.6875rem;
+  height: 2.6875rem;
 }
 
 .navbar__titles {
   display: flex;
   flex-direction: column;
-  font-family: var(--font-heading);
-  line-height: 1.1;
 }
 
 .navbar__title {
-  font-size: var(--fs-lg);
-  font-weight: 700;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.5;
 }
 
 .navbar__subtitle {
+  margin-top: -0.5625rem;
   color: var(--color-purple);
+  font-family: var(--font-body);
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .navbar__links {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: 1.875rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -50,7 +54,9 @@
 .navbar__link {
   position: relative;
   font-family: var(--font-heading);
-  font-size: var(--fs-md);
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1.5;
   transition: color var(--transition);
 }
 
@@ -60,7 +66,7 @@
 }
 
 .navbar__link.active {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* Active page underline */
@@ -69,8 +75,8 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -0.5rem;
-  height: 0.25rem;
-  border-radius: var(--radius-pill);
+  bottom: -0.625rem;
+  height: 0.4375rem;
+  border-radius: 0.625rem;
   background: var(--color-purple);
 }

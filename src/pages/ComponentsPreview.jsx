@@ -11,7 +11,6 @@ import { chunk, getImages, moveToFront } from '../utils/images.js'
 import githubIcon from '../assets/icons/github.svg'
 import linkedinIcon from '../assets/icons/linkedin.svg'
 import facebookIcon from '../assets/icons/facebook.svg'
-import instagramIcon from '../assets/icons/instagram.svg'
 import './ComponentsPreview.css'
 
 // Dev-only page (localhost:5173/components) for checking shared components in isolation
@@ -31,7 +30,6 @@ const socialIcons = [
   [linkedinIcon, 'LinkedIn'],
   [githubIcon, 'GitHub'],
   [facebookIcon, 'Facebook'],
-  [instagramIcon, 'Instagram'],
 ]
 
 const toGridItems = (images, label, pixelated = false) =>
