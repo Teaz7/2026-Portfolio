@@ -18,10 +18,8 @@ const COPIED_DURATION = 2000
   as a square and turns, "Contact" and "Let's Connect!" type, the links wipe in,
   the pitch fades in, the buttons slide in from the right, then the availability.
 */
-const LABEL = 'Contact'
 const HEADING = 'Let’s Connect!'
-const labelTyping = { delay: 300, speed: 45 }
-const headingTyping = { delay: 700, speed: 45 }
+const headingTyping = { delay: 800, speed: 45 } // after the label (SectionLabel.jsx)
 const LINKS_START = headingTyping.delay + HEADING.length * headingTyping.speed + 50
 const PITCH_START = LINKS_START + 200
 const BUTTONS_START = PITCH_START + 250
@@ -78,8 +76,8 @@ function ContactSection() {
     <footer ref={ref} id="contact" className={`contact contact--${phase}`}>
       <Container className="contact__inner">
         <div className="contact__main">
-          <SectionLabel tone="light">
-            <Typewriter key={run} text={LABEL} {...typing} {...labelTyping} />
+          <SectionLabel tone="light" reveal={{ phase, run }}>
+            Contact
           </SectionLabel>
           <p className="contact__heading">
             <Typewriter key={run} text={HEADING} {...typing} {...headingTyping} />

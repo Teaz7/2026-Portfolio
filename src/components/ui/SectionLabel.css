@@ -28,3 +28,12 @@
 .section-label--light {
   color: var(--color-white);
 }
+
+/* Scroll reveal (keyframes in IntroOverlay.css) */
+.section-label--armed .section-label__diamond {
+  opacity: 0;
+}
+
+.section-label--play .section-label__diamond {
+  animation: intro-diamond 700ms var(--ease-out-strong) backwards;
+}

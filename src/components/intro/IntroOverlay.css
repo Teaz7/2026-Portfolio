@@ -59,24 +59,55 @@
   }
 }
 
+/* Chips / tags dealing out from behind the previous one (offsets from useDealOffsets) */
+@keyframes intro-deal {
+  from {
+    opacity: 0;
+    transform: translate(var(--deal-x, 0), var(--deal-y, 0));
+  }
+}
+
+/* Bullet text sliding in from the left */
+@keyframes intro-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+}
+
+/* Bullet diamond: fades in as a square, then turns */
+@keyframes intro-bullet {
+  0% {
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  45% {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(45deg);
+  }
+}
+
 @keyframes intro-fade {
   from {
     opacity: 0;
   }
 }
 
-/* Section label diamond: arrives as a square, then turns into the diamond */
+/* Section label diamond: slides in as a square, then turns into the diamond */
 @keyframes intro-diamond {
   0% {
     opacity: 0;
-    transform: scale(0.4) rotate(0deg);
+    transform: translateX(-1.5rem) rotate(0deg);
   }
   45% {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
+    transform: translateX(0) rotate(0deg);
   }
   100% {
-    transform: scale(1) rotate(45deg);
+    transform: translateX(0) rotate(45deg);
   }
 }
 

@@ -1,5 +1,7 @@
 // Projects page content, in display order. Text matches the Figma design.
-// carousel: settings for components/ui/Carousel (sizes in rem = Figma px / 16)
+// carousel: settings for components/ui/Carousel (sizes in rem = px / 16). Phone and web
+// carousels are 1.18x the Figma size to fill the pinned black band; the portfolio one
+// is smaller than Figma so it fits on the screen.
 // bullets: plain strings, or { text, nowrap: true } for lines Figma keeps on one line
 
 export const projectGroups = [
@@ -25,7 +27,7 @@ export const projects = [
     roles: ['Lead Developer', 'Repository Maintainer', 'DevOps Engineer'],
     scope: ['Mobile App Development', 'AI Integration', 'Cloud Services Integration'],
     images: 'projects/aibrecare',
-    carousel: { perSlide: 4, width: '78.625rem', height: '37.5rem', accent: 'var(--color-aibrecare)' },
+    carousel: { perSlide: 4, width: '92.75rem', height: '44.25rem', accent: 'var(--color-aibrecare)' },
   },
   {
     id: 'tibiao',
@@ -47,9 +49,9 @@ export const projects = [
     // One screen per slide, with the neighbors peeking in
     carousel: {
       perSlide: 1,
-      width: '68.75rem',
-      height: '31.25rem',
-      slideWidth: '56.0625rem',
+      width: '81.125rem',
+      height: '36.875rem',
+      slideWidth: '66.125rem',
       accent: 'var(--color-tibiao)',
     },
   },
@@ -70,7 +72,7 @@ export const projects = [
     roles: ['Lead Developer', 'Repository Maintainer', 'Database Design'],
     scope: ['Mobile App Development', 'Database Integration'],
     images: 'projects/cozytask',
-    carousel: { perSlide: 3, width: '58.1875rem', height: '37.5rem', accent: 'var(--color-cozytask)' },
+    carousel: { perSlide: 3, width: '68.625rem', height: '44.25rem', accent: 'var(--color-cozytask)' },
   },
   {
     id: 'lagawta',
@@ -88,7 +90,7 @@ export const projects = [
     roles: ['UI/UX Designer', 'Quality Assurance'],
     scope: ['Mobile UI/UX Design', 'AI Chatbot', 'Augmented Reality'],
     images: 'projects/lagawta',
-    carousel: { perSlide: 4, width: '78.625rem', height: '37.5rem', accent: 'var(--color-lagawta)' },
+    carousel: { perSlide: 4, width: '92.75rem', height: '44.25rem', accent: 'var(--color-lagawta)' },
   },
   {
     id: 'agrilinko',
@@ -106,7 +108,7 @@ export const projects = [
     roles: ['Lead UI/UX Designer', 'Quality Assurance'],
     scope: ['Mobile UI/UX Design', 'Blockchain Technology'],
     images: 'projects/agrilinko',
-    carousel: { perSlide: 3, width: '61rem', height: '40.625rem', accent: 'var(--color-agrilinko)' },
+    carousel: { perSlide: 3, width: '72rem', height: '47.9375rem', accent: 'var(--color-agrilinko)' },
   },
   {
     id: 'portfolio',
@@ -125,6 +127,6 @@ export const projects = [
     scope: ['UI/UX Design', 'Web Development'],
     images: 'projects/portfolio',
     // Two page mockups side by side, then the wide one on its own
-    carousel: { perSlide: 2, width: '90.625rem', height: '60.5625rem', fit: 'width' },
+    carousel: { perSlide: 2, width: '71.8125rem', height: '48rem', fit: 'width' },
   },
 ]

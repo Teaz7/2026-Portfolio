@@ -111,16 +111,11 @@
 }
 
 /* Scroll reveal (keyframes in IntroOverlay.css, delays set inline in ContactSection.jsx) */
-.contact--armed .section-label__diamond,
 .contact--armed .contact__links,
 .contact--armed .contact__pitch,
 .contact--armed .contact__button,
 .contact--armed .contact__availability {
   opacity: 0;
-}
-
-.contact--play .section-label__diamond {
-  animation: intro-diamond 700ms var(--ease-out-strong) backwards;
 }
 
 .contact--play .contact__links {

@@ -12,6 +12,17 @@ export const INTRO_DELAY = 1200
 
 let onFirstPage = true
 
+/*
+  Scroll reveals that trigger while something else is still animating in (the
+  sweep on load, a page header) wait until it's done. Starts as the sweep.
+*/
+let holdUntil = INTRO_ENABLED ? performance.now() + INTRO_DELAY : 0
+
+export const holdRevealsFor = (ms) => {
+  holdUntil = Math.max(holdUntil, performance.now() + ms)
+}
+export const revealWait = () => Math.max(0, Math.round(holdUntil - performance.now()))
+
 export const playsIntro = () => INTRO_ENABLED && onFirstPage
 export const leaveFirstPage = () => {
   onFirstPage = false

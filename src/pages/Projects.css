@@ -32,7 +32,10 @@
   padding-bottom: 0;
 }
 
+/* Stays in place (top set by useStickyFit) while the carousel band slides over it */
 .project__main {
+  position: sticky;
+  z-index: 0;
   display: flex;
   justify-content: space-between;
   gap: var(--space-4);
@@ -86,6 +89,10 @@
   padding-left: 3.5625rem; /* 57px */
 }
 
+.project__bullets li > span {
+  display: block;
+}
+
 /* Bullets Figma keeps on one line even past the 1120px width */
 .project__bullets li.is-nowrap {
   white-space: nowrap;
@@ -133,4 +140,92 @@
 
 .project__side-item dd.is-compact {
   font-size: 1.875rem; /* 30px */
+}
+
+/* Tags cover the next one while they deal out */
+.project__head .tag {
+  background: var(--color-white);
+}
+
+/* Carousel band: slides over the content, covers the screen, then stays pinned.
+   The spacer after the stage is how long it stays pinned. */
+.project__track {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  transform: translateZ(0); /* own GPU layer, so it always paints above the content */
+  background: var(--color-dark);
+}
+
+.project__track::after {
+  content: '';
+  display: block;
+  height: 70svh;
+}
+
+.project__stage {
+  position: sticky; /* top set by useStickyFit */
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+}
+
+/* Scroll-linked (--enter 0 → 1 from useCoverProgress, reversed when scrolling back
+   up): the screens slide up from the bottom first, then both arrows rise together.
+   Each part's progress is eased in-out (smoothstep: p² × (3 − 2p)). */
+.project__carousel {
+  --screens-linear: clamp(0, calc(var(--enter, 1) / 0.7), 1);
+  --arrows-linear: clamp(0, calc((var(--enter, 1) - 0.55) / 0.45), 1);
+  --screens: calc(
+    var(--screens-linear) * var(--screens-linear) * (3 - 2 * var(--screens-linear))
+  );
+  --arrows: calc(var(--arrows-linear) * var(--arrows-linear) * (3 - 2 * var(--arrows-linear)));
+
+  width: 100%;
+}
+
+/* will-change keeps these on their own GPU layers: moved without repainting, so
+   no faint copies of the screen edges are left behind while scrolling */
+.project__carousel .carousel__viewport {
+  opacity: var(--screens);
+  translate: 0 calc((1 - var(--screens)) * 50svh);
+  will-change: translate, opacity;
+}
+
+.project__carousel .carousel__arrow {
+  opacity: var(--arrows);
+  translate: 0 calc((1 - var(--arrows)) * 3rem);
+  will-change: translate, opacity;
+}
+
+/* Content reveal (keyframes in IntroOverlay.css, delays set inline in Projects.jsx) */
+.project--armed .project__head .tag-list > li,
+.project--armed .project__intro,
+.project--armed .project__bullets li::before,
+.project--armed .project__bullets li > span,
+.project--armed .project__side-item {
+  opacity: 0;
+}
+
+.project--play .project__head .tag-list > li {
+  position: relative;
+  animation: intro-deal 500ms var(--ease-out-strong) backwards;
+}
+
+.project--play .project__intro {
+  animation: intro-wipe 1000ms var(--ease-out-strong) backwards;
+}
+
+.project--play .project__bullets li::before {
+  animation: intro-bullet 600ms var(--ease-out-strong) backwards;
+  animation-delay: var(--bullet-delay);
+}
+
+.project--play .project__bullets li > span {
+  animation: intro-slide-right 550ms var(--ease-out-strong) backwards;
+  animation-delay: calc(var(--bullet-delay) + 250ms);
+}
+
+.project--play .project__side-item {
+  animation: intro-slide-left 600ms var(--ease-out-strong) backwards;
 }

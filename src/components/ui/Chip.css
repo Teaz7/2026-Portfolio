@@ -5,6 +5,7 @@
   padding: 0.9375rem 2.1875rem; /* 15px 35px */
   border: 2px solid var(--color-dark);
   border-radius: var(--radius-pill);
+  background: var(--color-white); /* covers the next chip during the entrance */
   font-family: var(--font-body);
   font-size: 2rem;
   font-weight: 500;
@@ -30,4 +31,11 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* Page entrance: chips deal out, each from behind the previous one
+   (offsets from useDealOffsets, delays set inline) */
+.page-entrance .chip-list > li {
+  position: relative;
+  animation: intro-deal 550ms var(--ease-out-strong) backwards;
 }

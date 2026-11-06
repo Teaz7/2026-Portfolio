@@ -43,11 +43,33 @@ function ScrollManager() {
   return null
 }
 
+// Dragging the scrollbar (or any other native scroll) while a wheel scroll is still
+// gliding: Lenis would keep pulling the page back toward the old wheel target. A
+// scroll position Lenis didn't set means someone else is scrolling, so drop the glide.
+function ScrollbarGrab() {
+  const lenis = useLenis()
+
+  useEffect(() => {
+    if (!lenis) return
+    const onScroll = () => {
+      if (!lenis.isScrolling || lenis.isScrolling === 'native') return
+      if (Math.abs(window.scrollY - lenis.animatedScroll) > 2) {
+        lenis.scrollTo(window.scrollY, { immediate: true, force: true })
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [lenis])
+
+  return null
+}
+
 // Shared page frame: navbar, page content, then the Contact section
 function Layout() {
   return (
     <ReactLenis root options={lenisOptions}>
       <ScrollManager />
+      <ScrollbarGrab />
       <Navbar />
       <main>
         <Outlet />
