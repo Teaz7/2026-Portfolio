@@ -1,7 +1,8 @@
 /*
-  The panel is 160vw wide with 30vw soft gradient edges, so a fully purple
-  100vw sits in the middle. Timeline (1500ms): sweep in 0–645ms, hold until
-  855ms, slide away 855–1500ms.
+  The purple panel (PageTransition.jsx). It's 160vw wide with 30vw soft gradient
+  edges, so a fully purple 100vw sits in the middle.
+  - intro (first load, 1500ms): sweep in 0–645ms, hold until 855ms, slide away
+  - between pages: --cover sweeps in, --hold stays, --reveal slides away
 */
 .intro-overlay {
   position: fixed;
@@ -19,6 +20,37 @@
     rgb(148 88 188 / 0%) 100%
   );
   animation: intro-sweep 1500ms both;
+}
+
+.intro-overlay--cover {
+  animation: intro-sweep-in 650ms var(--ease-in-out-strong) both;
+}
+
+.intro-overlay--hold {
+  animation: none;
+  transform: translateX(-30vw);
+}
+
+.intro-overlay--reveal {
+  animation: intro-sweep-out 650ms var(--ease-in-out-strong) both;
+}
+
+@keyframes intro-sweep-in {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-30vw);
+  }
+}
+
+@keyframes intro-sweep-out {
+  from {
+    transform: translateX(-30vw);
+  }
+  to {
+    transform: translateX(-160vw);
+  }
 }
 
 @keyframes intro-sweep {
@@ -122,6 +154,10 @@
 .intro-slide-up {
   animation: intro-slide-up 900ms var(--ease-out-strong) backwards;
   animation-delay: var(--slide-delay, 1500ms);
+}
+
+.intro-slide-up-wait {
+  translate: 0 var(--slide-from, 100vh);
 }
 
 @keyframes intro-slide-up {

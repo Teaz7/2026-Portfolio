@@ -46,7 +46,13 @@ export const revealWait = () => {
   return Math.round(Math.max(0, ...waits))
 }
 
-export const playsIntro = () => INTRO_ENABLED && onFirstPage
+// The page the visit started on. Compared directly (not only via leaveFirstPage,
+// which runs after the new page has already rendered) so the first navigation
+// doesn't wait for a sweep that isn't playing.
+const firstPath = window.location.pathname
+
+export const playsIntro = () =>
+  INTRO_ENABLED && onFirstPage && window.location.pathname === firstPath
 export const leaveFirstPage = () => {
   onFirstPage = false
 }

@@ -1,6 +1,7 @@
 import { startTransition, useEffect, useRef, useState } from 'react'
 import { INTRO_ENABLED, holdRevealsFor, revealWait } from '../utils/intro.js'
 import { isPriorityScroll } from '../utils/scrollPriority.js'
+import { isTransitionPending } from '../utils/pageTransition.js'
 
 /*
   Scroll-triggered reveal that replays.
@@ -35,7 +36,8 @@ export function useScrollReveal({
   useEffect(() => {
     if (!INTRO_ENABLED || !enabled) return
     const update = () => {
-      if (!ref.current || isPriorityScroll()) return
+      // Not while scrolling to the top or while a page transition covers the page
+      if (!ref.current || isPriorityScroll() || isTransitionPending()) return
       const top = ref.current.getBoundingClientRect().top / window.innerHeight
       // Resets (content already off-screen) run at low priority, so a batch of
       // them, e.g. after back to top, doesn't freeze a frame

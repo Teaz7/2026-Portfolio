@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { ArrowRight, Download } from 'lucide-react'
 import Container from '../components/ui/Container.jsx'
 import Button from '../components/ui/Button.jsx'
@@ -6,9 +6,9 @@ import Tag from '../components/ui/Tag.jsx'
 import Typewriter from '../components/ui/Typewriter.jsx'
 import { site } from '../data/site.js'
 import { getImage } from '../utils/images.js'
-import { INTRO_DELAY, introDelay, playsIntro, stagger } from '../utils/intro.js'
+import { stagger } from '../utils/intro.js'
 import { revealDelay, useScrollReveal } from '../hooks/useScrollReveal.js'
-import { useIntroSlideUp } from '../hooks/usePageEntrance.js'
+import { useIntroSlideUp, usePageEntrance } from '../hooks/usePageEntrance.js'
 import linkedinIcon from '../assets/icons/home/linkedin-purple.svg'
 import githubIcon from '../assets/icons/home/github-purple.svg'
 import facebookIcon from '../assets/icons/home/facebook-purple.svg'
@@ -47,7 +47,8 @@ const techIcons = [
 ]
 
 /*
-  Page-load timeline, in ms after the purple sweep reveals the page (INTRO_DELAY).
+  Hero timeline, in ms after the page appears (after the purple sweep on a first
+  load, right away when navigating here, like the other pages).
   Name types first; the course and year type after it while the bio wipes in and
   the photo slides in; then the tag rows and the resume row rise one after another.
 */
@@ -65,8 +66,8 @@ const BODY_START = 950 // bio wipe + photo slide
 const TAG_ROW_START = [1350, 1600]
 const TAG_ROW_STEP = [70, 50]
 const ACTIONS_START = 1950
+const HERO_DURATION = ACTIONS_START + stagger(3, 70) + 550
 
-const typing = ({ delay, speed }) => ({ delay: INTRO_DELAY + delay, speed })
 
 /*
   Projects & Designs reveal, in ms after the black section covers the screen.
@@ -97,7 +98,11 @@ function IconGroup({ icons, pairOf }) {
 
 function Home() {
   // Only animate when Home is the first page of the visit
-  const [intro] = useState(playsIntro)
+  // Plays on every visit, like the other pages' headers
+  const start = usePageEntrance(HERO_DURATION)
+  const intro = start !== null
+  const introDelay = (ms) => ({ animationDelay: `${(start ?? 0) + ms}ms` })
+  const typing = ({ delay, speed }) => ({ delay: (start ?? 0) + delay, speed })
   // Plays once the black section covers the screen (top within the top 5%); resets
   // when scrolled back up until its content is off-screen (top below 70%)
   const {

@@ -5,7 +5,7 @@ import 'lenis/dist/lenis.css'
 import Navbar from './Navbar.jsx'
 import ContactSection from './ContactSection.jsx'
 import Cursor from './Cursor.jsx'
-import IntroOverlay from '../intro/IntroOverlay.jsx'
+import PageTransition from '../intro/PageTransition.jsx'
 import ScrollTopButton from './ScrollTopButton.jsx'
 import { leaveFirstPage } from '../../utils/intro.js'
 import { easeInOutCubic, reduceMotion } from './scrolling.js'
@@ -66,7 +66,7 @@ function Layout() {
       </main>
       <ContactSection />
       <ScrollTopButton />
-      <IntroOverlay />
+      <PageTransition />
       <Cursor />
     </ReactLenis>
   )
