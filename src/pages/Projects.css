@@ -175,9 +175,9 @@
 }
 
 /* Once the band covers the screen: the screens slide up from the bottom (ease in-out),
-   then both arrows rise together. --band-wait: extra delay if something above is
-   still animating. */
-.project__track--armed :is(.carousel__viewport, .carousel__arrow) {
+   then both arrows and the dots rise together. --band-wait: extra delay if something
+   above is still animating. */
+.project__track--armed :is(.carousel__viewport, .carousel__arrow, .carousel__dots) {
   opacity: 0;
 }
 
@@ -187,7 +187,7 @@
   animation-delay: var(--band-wait, 0ms);
 }
 
-.project__track--play .carousel__arrow {
+.project__track--play :is(.carousel__arrow, .carousel__dots) {
   animation: intro-rise 500ms var(--ease-out-strong) backwards;
   animation-delay: calc(var(--band-wait, 0ms) + 700ms);
 }
@@ -222,4 +222,143 @@
 
 .project--play .project__side-item {
   animation: intro-slide-left 600ms var(--ease-out-strong) backwards;
+}
+
+/* ---------- Tablet/phone ---------- */
+@media (max-width: 1199px) {
+  .projects-header {
+    margin-top: 2.5rem;
+  }
+
+  .projects-header__title {
+    font-size: clamp(2.5rem, 10vw, 5.5rem);
+    line-height: 1.1;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .projects-header nav {
+    margin-top: 1.25rem;
+  }
+
+  .projects-group-label {
+    padding-top: 2.5rem;
+  }
+
+  .project {
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
+  }
+
+  /* Text first, sidebar underneath */
+  .project__main {
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .project__content {
+    width: 100%;
+  }
+
+  .project__head {
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    width: auto;
+  }
+
+  .project__head .tag-list {
+    flex-wrap: wrap;
+  }
+
+  .project__title {
+    font-size: clamp(2rem, 7vw, 3.25rem);
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  .project__intro {
+    margin-top: 0.75rem;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .project__bullets {
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .project__bullets li {
+    padding-left: 1.75rem;
+  }
+
+  .project__bullets li.is-nowrap {
+    white-space: normal;
+  }
+
+  .project__bullets li::before {
+    top: 0.5rem;
+    left: 0.25rem;
+    width: 0.5625rem;
+    height: 0.5625rem;
+    border-radius: 2px;
+  }
+
+  /* Sidebar: Context / Roles / Scope side by side on tablets */
+  .project__side {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    margin: 0;
+  }
+
+  .project__side-item dt {
+    font-size: 0.8125rem;
+    line-height: 2;
+  }
+
+  .project__side-item dd,
+  .project__side-item dd.is-compact {
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+}
+
+/* Tablet/phone swipe hint: after the screens and dots are in, the carousel slides a
+   little toward the next slide and settles back (once each time the band plays) */
+@media (max-width: 1199px) and (prefers-reduced-motion: no-preference) {
+  .project__track--play .carousel__track {
+    animation: carousel-nudge 1100ms var(--ease-in-out-strong) backwards;
+    animation-delay: calc(var(--band-wait, 0ms) + 1400ms);
+  }
+}
+
+@keyframes carousel-nudge {
+  0%,
+  100% {
+    translate: 0;
+  }
+
+  40% {
+    translate: -14vw;
+  }
+}
+
+/* Phone: sidebar items stacked */
+@media (max-width: 639px) {
+  /* The text is taller than the screen here, so pinning it would let the band cover
+     the sidebar as soon as it scrolled into view. It scrolls normally instead and
+     the band follows it (static also ignores the top set by useStickyFit). */
+  .project__main {
+    position: static;
+  }
+
+  .project__side {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }

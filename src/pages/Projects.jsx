@@ -11,9 +11,59 @@ import { useStickyFit } from '../hooks/useCover.js'
 import { stagger } from '../utils/intro.js'
 import { projectGroups, projects } from '../data/projects.js'
 import { chunk, getImages } from '../utils/images.js'
+import { useScreenSize } from '../hooks/useScreenSize.js'
 import './Projects.css'
 
 const projectsById = Object.fromEntries(projects.map((project) => [project.id, project]))
+
+/*
+  Carousel sizes below desktop: the carousel spans the whole screen width (swipe and
+  the dots replace the arrows, see Carousel.css) and shows fewer screens per slide.
+  Each slide is narrower than the screen, so the neighboring slides peek in at the
+  edges: a hint that the images can be swiped.
+  - phone app screens: 2 per slide on tablets, 1 on phones
+  - one wide web screenshot (Tibiao): its own proportions
+  - page mockups (this website): 2 per slide on tablets, 1 on phones
+*/
+const SCREEN_WIDTH = '100vw'
+const WIDE_SLIDE = '(100vw - 2 * var(--page-margin) - 3rem)' // leaves ~1.75rem of peek
+const WEB_RATIO = 1.793 // Tibiao screenshots: width / height
+const MOCKUP_RATIO = 1.398 // portfolio mockups: height / width
+const PHONE_RATIO = 0.461 // app screens: width / height
+
+function carouselFor(carousel, size) {
+  if (size === 'desktop') return carousel
+  const phone = size === 'phone'
+
+  if (carousel.fit === 'width') {
+    const imageWidth = phone ? WIDE_SLIDE : `(${WIDE_SLIDE} - 1rem) / 2`
+    return {
+      ...carousel,
+      width: SCREEN_WIDTH,
+      slideWidth: `calc${WIDE_SLIDE}`,
+      perSlide: phone ? 1 : 2,
+      height: `calc(${imageWidth} * ${MOCKUP_RATIO})`,
+    }
+  }
+  if (carousel.perSlide === 1) {
+    return {
+      ...carousel,
+      width: SCREEN_WIDTH,
+      slideWidth: `calc${WIDE_SLIDE}`,
+      height: `calc(${WIDE_SLIDE} / ${WEB_RATIO})`,
+    }
+  }
+  const perSlide = phone ? 1 : 2
+  const height = phone ? 'min(62svh, 34rem)' : 'min(60svh, 46rem)'
+  return {
+    ...carousel,
+    width: SCREEN_WIDTH,
+    // just wide enough for the screens, so the next ones show at the sides
+    slideWidth: `calc(${perSlide} * ${height} * ${PHONE_RATIO} + ${perSlide - 1}rem)`,
+    perSlide,
+    height,
+  }
+}
 
 /*
   Header entrance, in ms after the page appears: the title types, then the jump
@@ -52,7 +102,8 @@ function SideItem({ label, style, children }) {
 }
 
 function ProjectSection({ project }) {
-  const { carousel } = project
+  const size = useScreenSize()
+  const carousel = carouselFor(project.carousel, size)
   const slides = chunk(getImages(project.images), carousel.perSlide)
   const time = projectTimeline(project.name)
 
@@ -147,6 +198,7 @@ function ProjectSection({ project }) {
         <div ref={stageRef} className="project__stage">
           <div className="project__carousel">
             <Carousel
+              key={size}
               label={project.name}
               slides={slides}
               width={carousel.width}
