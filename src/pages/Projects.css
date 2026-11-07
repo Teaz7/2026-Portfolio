@@ -337,17 +337,6 @@
   }
 }
 
-@keyframes carousel-nudge {
-  0%,
-  100% {
-    translate: 0;
-  }
-
-  40% {
-    translate: -14vw;
-  }
-}
-
 /* Phone: sidebar items stacked */
 @media (max-width: 639px) {
   /* The text is taller than the screen here, so pinning it would let the band cover

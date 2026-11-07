@@ -589,3 +589,292 @@
   transform: scale(1.05);
   box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 30%);
 }
+
+/* ---------- Tablet/phone ---------- */
+@media (max-width: 1199px) {
+  .exp-header {
+    margin-top: 2.5rem;
+  }
+
+  .exp-header__title {
+    font-size: clamp(2.5rem, 10vw, 5.5rem);
+    line-height: 1.1;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .exp-header nav {
+    margin-top: 1.25rem;
+  }
+
+  .exp-header + .exp-label {
+    padding-top: 2.5rem;
+  }
+
+  /* Entries: text first, sidebar underneath */
+  .exp-entry {
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .exp-entry__main {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .exp-entry--game .exp-entry__content,
+  .exp-entry--link .exp-entry__content,
+  .exp-entry--webinar .exp-entry__content {
+    width: 100%;
+  }
+
+  .exp-head,
+  .exp-head--game {
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+    width: auto;
+  }
+
+  .exp-head__title,
+  .exp-entry--webinar .exp-head__title {
+    width: 100%;
+    font-size: clamp(2rem, 7vw, 3.25rem);
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  .exp-head__category,
+  .exp-head__event {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    white-space: normal;
+  }
+
+  .exp-head__tags {
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .exp-intro,
+  .exp-entry--link .exp-intro,
+  .exp-entry--webinar .exp-intro {
+    margin-top: 0.75rem;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .exp-bullets {
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .exp-bullets li {
+    padding-left: 1.75rem;
+  }
+
+  .exp-bullets li::before {
+    top: 0.5rem;
+    left: 0.25rem;
+    width: 0.5625rem;
+    height: 0.5625rem;
+    border-radius: 2px;
+  }
+
+  /* Sidebar: side by side on tablets */
+  .exp-side,
+  .exp-side--wide,
+  .exp-entry--webinar .exp-side {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    margin: 0;
+  }
+
+  .exp-side__item dt {
+    font-size: 0.8125rem;
+    line-height: 2;
+  }
+
+  .exp-side__item dd,
+  .exp-side__item dd.is-small {
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+
+  /* Gallery bands: carousel across the screen (GalleryCarousel in Experiences.jsx) */
+  .exp-band,
+  .exp-entry--webinar .exp-band {
+    margin-top: 2.5rem;
+  }
+
+  .exp-stage {
+    padding-block: 1rem;
+  }
+
+  .exp-gallery-carousel {
+    width: 100%;
+  }
+
+  .exp-gallery-carousel__caption {
+    padding: 0 var(--page-margin);
+    font-family: var(--font-heading);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* Once the band covers the screen: photos rise in, then the dots and the credit,
+     then the swipe hint (same as the Projects carousels) */
+  .exp-band--armed :is(.carousel__viewport, .carousel__dots, .exp-gallery-carousel__caption) {
+    opacity: 0;
+  }
+
+  .exp-band--play .carousel__viewport {
+    --rise-from: 40svh;
+    animation: intro-rise-far 900ms var(--ease-in-out-strong) backwards;
+    animation-delay: var(--band-wait, 0ms);
+  }
+
+  .exp-band--play :is(.carousel__dots, .exp-gallery-carousel__caption) {
+    animation: intro-rise 500ms var(--ease-out-strong) backwards;
+    animation-delay: calc(var(--band-wait, 0ms) + 700ms);
+  }
+
+  /* Awards: one column, notes underneath */
+  .exp-awards {
+    flex-direction: column;
+    gap: 2.5rem;
+    padding-top: 2rem;
+    padding-bottom: 3.5rem;
+  }
+
+  .exp-awards__list {
+    gap: 1.5rem;
+  }
+
+  .exp-awards__row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 1rem;
+    align-items: baseline;
+  }
+
+  .exp-awards__row dt {
+    font-size: clamp(1.5rem, 5.5vw, 2.5rem);
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .exp-awards__row dd {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .exp-awards__side {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .exp-awards__note-label {
+    font-size: 0.8125rem;
+    line-height: 2;
+  }
+
+  .exp-awards__note-text {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .exp-awards__gwa {
+    gap: 0.25rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .exp-awards__gwa dt {
+    min-width: 0;
+  }
+
+  /* Certificates: two per row on tablets */
+  .exp-certs__title {
+    font-size: clamp(1.75rem, 6vw, 3rem);
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .exp-label + .exp-certs .exp-certs__title {
+    margin-top: 2rem;
+  }
+
+  .exp-certs__grid,
+  .exp-certs__grid--lg,
+  .exp-certs__grid--sm,
+  .exp-certs__grid--md {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1rem;
+    width: auto;
+    padding: 1.5rem var(--page-margin) 2.5rem;
+  }
+
+  .exp-certs__grid--lg li,
+  .exp-certs__grid--sm li,
+  .exp-certs__grid--md li {
+    width: auto;
+  }
+
+  .exp-certs__grid--md .exp-tile,
+  .exp-certs__grid--md li:nth-child(n + 4) .exp-tile {
+    height: auto;
+    aspect-ratio: 1.41;
+  }
+
+  .exp-certs__caption {
+    margin-bottom: 0.375rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    white-space: normal;
+  }
+
+  /* No hover zoom on touch screens (a tap would leave it stuck zoomed) */
+  .exp-certs__grid .exp-tile:hover,
+  .exp-stage .exp-tile:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 1199px) and (prefers-reduced-motion: no-preference) {
+  .exp-band--play .carousel__track {
+    animation: carousel-nudge 1100ms var(--ease-in-out-strong) backwards;
+    animation-delay: calc(var(--band-wait, 0ms) + 1400ms);
+  }
+}
+
+/* Phone */
+@media (max-width: 639px) {
+  /* Taller than the screen: scrolls normally so the band doesn't cover the sidebar */
+  .exp-entry__main {
+    position: static;
+  }
+
+  .exp-side,
+  .exp-side--wide,
+  .exp-entry--webinar .exp-side,
+  .exp-awards__side {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Certificates one per row, except the small Sololearn ones */
+  .exp-certs__grid--lg,
+  .exp-certs__grid--md {
+    grid-template-columns: 1fr;
+  }
+}

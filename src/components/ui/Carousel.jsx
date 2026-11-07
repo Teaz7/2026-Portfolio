@@ -23,12 +23,13 @@ function ArrowIcon() {
 
 /*
   Dark band with screenshots, one group of images per slide.
-  slides:     [[{ src, name }, ...], ...]  (use chunk() from utils/images.js)
+  slides:     [[{ src, name, alt?, pixelated? }, ...], ...]  (chunk() in utils/images.js)
   width:      visible window width, e.g. '78.625rem'
   height:     visible window height, e.g. '37.5rem'
   slideWidth: narrower than `width` to show the neighboring slides at the edges (peek)
   fit:        'height' = images are `height` tall (phone screens)
               'width'  = images share the slide width and align to the top (page mockups)
+              'contain' = each image fits whole inside the slide box (mixed photo shapes)
   accent:     project color for the arrows' hover/click and the current dot,
               e.g. 'var(--color-aibrecare)' (purple when not set)
 
@@ -161,7 +162,8 @@ function Carousel({ slides, label, width, height, slideWidth = width, fit = 'hei
                     <img
                       key={image.src}
                       src={image.src}
-                      alt={isCopy ? '' : `${label} screen ${image.name}`}
+                      alt={isCopy ? '' : (image.alt ?? `${label} screen ${image.name}`)}
+                      className={image.pixelated ? 'is-pixelated' : undefined}
                       draggable={false}
                     />
                   ))}

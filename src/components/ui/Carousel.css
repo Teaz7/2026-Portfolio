@@ -84,6 +84,18 @@
   height: auto;
 }
 
+/* Photos of different shapes: each fits whole inside the slide box */
+.carousel--fit-contain .carousel__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Pixel art (game screenshots) stays sharp when scaled */
+.carousel__slide img.is-pixelated {
+  image-rendering: pixelated;
+}
+
 /* Arrows: default → hover (accent arrow) → click (accent circle, white arrow) */
 .carousel__arrow {
   display: grid;
@@ -176,5 +188,18 @@
 
   .carousel__arrow {
     display: none;
+  }
+}
+
+/* Swipe hint the pages play once the carousel is in (see Projects.css / Experiences.css):
+   the slides glide a little toward the next one and settle back */
+@keyframes carousel-nudge {
+  0%,
+  100% {
+    translate: 0;
+  }
+
+  40% {
+    translate: -14vw;
   }
 }

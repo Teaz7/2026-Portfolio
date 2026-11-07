@@ -3,10 +3,12 @@ import Container from '../components/ui/Container.jsx'
 import Tag from '../components/ui/Tag.jsx'
 import Chip from '../components/ui/Chip.jsx'
 import SectionLabel from '../components/ui/SectionLabel.jsx'
+import Carousel from '../components/ui/Carousel.jsx'
 import Typewriter from '../components/ui/Typewriter.jsx'
 import { useDealOffsets, useIntroSlideUp, usePageEntrance } from '../hooks/usePageEntrance.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 import { useStickyFit } from '../hooks/useCover.js'
+import { useScreenSize } from '../hooks/useScreenSize.js'
 import { stagger } from '../utils/intro.js'
 import {
   awardNotes,
@@ -67,6 +69,36 @@ function Tile({ item, className = '', order }) {
       style={order === undefined ? undefined : { '--i': order }}
     >
       <img src={item.src} alt={item.alt} className={item.pixelated ? 'is-pixelated' : undefined} />
+    </div>
+  )
+}
+
+/*
+  Tablet/phone: a gallery band shows its photos as a carousel instead of the desktop
+  grid, one photo per slide. Photos come in different shapes (posters, screenshots,
+  event photos), so each slide is a fixed box and the photo fits whole inside it.
+  The slide is narrower than the screen so the next photos peek in at the sides.
+*/
+const GALLERY_SLIDE = {
+  phone: '(100vw - 2 * var(--page-margin) - 3rem)',
+  tablet: '(100vw - 2 * var(--page-margin) - 8rem)',
+}
+
+function GalleryCarousel({ items, label, size, caption }) {
+  const slide = GALLERY_SLIDE[size]
+  return (
+    <div className="exp-gallery-carousel">
+      <Carousel
+        key={size}
+        label={label}
+        slides={items.map((item) => [{ ...item, name: item.alt }])}
+        width="100vw"
+        slideWidth={`calc${slide}`}
+        // tall box: wide photos are limited by the width anyway, posters get bigger
+        height={`min(calc(${slide} * 1.25), 62svh)`}
+        fit="contain"
+      />
+      {caption && <p className="exp-gallery-carousel__caption">{caption}</p>}
     </div>
   )
 }
@@ -183,6 +215,7 @@ function HeadTags({ tags, at: delay, tagsRef }) {
 
 // Game jam entry: poster on the left, 2×3 grid of screenshots on the right
 function CompetitionEntry({ entry }) {
+  const size = useScreenSize()
   const items = toItems([entry.poster, ...entry.images], entry.award, { pixelated: true })
   const [poster, ...grid] = items
   const headLines = [entry.category, entry.event].filter(Boolean)
@@ -207,14 +240,18 @@ function CompetitionEntry({ entry }) {
       bullets={entry.bullets}
       side={entry.side}
       band={
-        <div className="exp-gallery-poster">
-          <Tile item={poster} order={0} className="exp-gallery-poster__poster" />
-          <div className="exp-gallery-poster__grid">
-            {grid.map((item, index) => (
-              <Tile key={item.src} item={item} order={index + 1} />
-            ))}
+        size !== 'desktop' ? (
+          <GalleryCarousel items={items} label={entry.award} size={size} />
+        ) : (
+          <div className="exp-gallery-poster">
+            <Tile item={poster} order={0} className="exp-gallery-poster__poster" />
+            <div className="exp-gallery-poster__grid">
+              {grid.map((item, index) => (
+                <Tile key={item.src} item={item} order={index + 1} />
+              ))}
+            </div>
           </div>
-        </div>
+        )
       }
     />
   )
@@ -263,6 +300,7 @@ function AwardsSection() {
 }
 
 function LinkExeEntry() {
+  const size = useScreenSize()
   const tall = toItems(linkExe.tall, linkExe.name)
   const grid = toItems(linkExe.grid, linkExe.name)
   const items = [...tall, ...grid]
@@ -280,27 +318,37 @@ function LinkExeEntry() {
       side={linkExe.side}
       sideClassName="exp-side--wide"
       band={
-        <figure className="exp-gallery-link">
-          <div className="exp-gallery-link__photos">
-            <div className="exp-gallery-link__tall">
-              {tall.map((item, index) => (
-                <Tile key={item.src} item={item} order={index} />
-              ))}
+        size !== 'desktop' ? (
+          <GalleryCarousel
+            items={items}
+            label={linkExe.name}
+            size={size}
+            caption={linkExe.credit}
+          />
+        ) : (
+          <figure className="exp-gallery-link">
+            <div className="exp-gallery-link__photos">
+              <div className="exp-gallery-link__tall">
+                {tall.map((item, index) => (
+                  <Tile key={item.src} item={item} order={index} />
+                ))}
+              </div>
+              <div className="exp-gallery-link__grid">
+                {grid.map((item, index) => (
+                  <Tile key={item.src} item={item} order={tall.length + index} />
+                ))}
+              </div>
             </div>
-            <div className="exp-gallery-link__grid">
-              {grid.map((item, index) => (
-                <Tile key={item.src} item={item} order={tall.length + index} />
-              ))}
-            </div>
-          </div>
-          <figcaption style={{ '--i': items.length }}>{linkExe.credit}</figcaption>
-        </figure>
+            <figcaption style={{ '--i': items.length }}>{linkExe.credit}</figcaption>
+          </figure>
+        )
       }
     />
   )
 }
 
 function WebinarEntry() {
+  const size = useScreenSize()
   const items = toItems(webinarCoHost.images, webinarCoHost.name)
 
   return (
@@ -315,11 +363,15 @@ function WebinarEntry() {
       bullets={webinarCoHost.bullets}
       side={webinarCoHost.side}
       band={
-        <div className="exp-gallery-webinar">
-          {items.map((item, index) => (
-            <Tile key={item.src} item={item} order={index} />
-          ))}
-        </div>
+        size !== 'desktop' ? (
+          <GalleryCarousel items={items} label={webinarCoHost.name} size={size} />
+        ) : (
+          <div className="exp-gallery-webinar">
+            {items.map((item, index) => (
+              <Tile key={item.src} item={item} order={index} />
+            ))}
+          </div>
+        )
       }
     />
   )
