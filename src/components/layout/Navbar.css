@@ -1,0 +1,248 @@
+/* Figma: Nav Bar, 1760×80, 30px from the top */
+.navbar {
+  padding-top: 1.875rem;
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: 5rem;
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar__logo {
+  width: 2.6875rem;
+  height: 2.6875rem;
+}
+
+.navbar__titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar__title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.navbar__subtitle {
+  margin-top: -0.5625rem;
+  color: var(--color-purple);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 1.875rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar__link {
+  position: relative;
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 500;
+  line-height: 1.5;
+  transition: color var(--transition);
+}
+
+.navbar__link:hover,
+.navbar__link.active {
+  color: var(--color-purple);
+}
+
+.navbar__link.active {
+  font-weight: 700;
+}
+
+/* Active page underline */
+.navbar__link.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.625rem;
+  height: 0.4375rem;
+  border-radius: 0.625rem;
+  background: var(--color-purple);
+}
+
+/* Page-load entrance (delays set inline in Navbar.jsx). The mobile menu button drops
+   in too, so it isn't showing through the purple sweep's soft edges. */
+.navbar--intro .navbar__brand,
+.navbar--intro .navbar__toggle,
+.navbar--intro .navbar__links > li {
+  animation: intro-drop 550ms var(--ease-out-strong) backwards;
+}
+
+/* Menu button: only below 1200px */
+.navbar__toggle {
+  display: none;
+}
+
+@media (max-width: 1199px) {
+  .navbar {
+    padding-top: 1.25rem;
+  }
+
+  .navbar__inner {
+    height: 3rem;
+  }
+
+  .navbar__logo {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .navbar__title {
+    font-size: 1.125rem;
+  }
+
+  .navbar__subtitle {
+    margin-top: -0.25rem;
+    font-size: 0.6875rem;
+  }
+
+  /* Round black button fixed in the top-right corner (the white ring keeps it
+     visible on dark sections); sits above the open menu so it also closes it */
+  .navbar__toggle {
+    position: fixed;
+    top: 1rem;
+    right: var(--page-margin);
+    z-index: 860;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-dark);
+    box-shadow:
+      0 0 0 2px var(--color-white),
+      0 0.5rem 1.5rem rgb(0 0 0 / 18%);
+    color: var(--color-white);
+    cursor: pointer;
+    transition:
+      background-color var(--transition),
+      scale 150ms ease-out;
+  }
+
+  .navbar__toggle:hover {
+    color: var(--color-purple);
+  }
+
+  .navbar__toggle:active {
+    scale: 0.94;
+    transition-duration: 0s;
+  }
+
+  .navbar__toggle svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .navbar--open .navbar__toggle {
+    box-shadow: 0 0 0 2px var(--color-purple);
+  }
+
+  /* The links become a full-screen black menu that wipes in from the right. Opening
+     starts fast and settles (400ms); closing is quicker (250ms) so it's out of the
+     way when a link starts the page transition. */
+  .navbar__links {
+    position: fixed;
+    inset: 0;
+    z-index: 850;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.25rem;
+    padding: 0 var(--page-margin);
+    background: var(--color-dark);
+    clip-path: inset(0 0 0 100%);
+    visibility: hidden;
+    transition:
+      clip-path 250ms var(--ease-drawer),
+      visibility 0s linear 250ms;
+  }
+
+  .navbar--open .navbar__links {
+    clip-path: inset(0);
+    visibility: visible;
+    transition:
+      clip-path 400ms var(--ease-drawer),
+      visibility 0s;
+  }
+
+  .navbar__link {
+    color: var(--color-white);
+    font-size: 2.25rem;
+    font-weight: 600;
+  }
+
+  /* Current page in purple (underline included) */
+  .navbar__link:hover,
+  .navbar__link.active {
+    color: var(--color-purple);
+  }
+
+  .navbar__link.active::after {
+    bottom: -0.25rem;
+    height: 0.3125rem;
+  }
+
+  .navbar__links .button--sm {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    padding: 0.625rem 1.5rem;
+  }
+
+  /* Purple Contact button: white text on hover (its usual black hover would vanish) */
+  .navbar__links .button--sm:hover {
+    background: var(--color-white);
+    color: var(--color-purple);
+  }
+
+  /* Links rise in one after another as the menu opens (--i set per item) */
+  .navbar--open .navbar__links :is(.navbar__link, .button) {
+    animation: intro-rise 500ms var(--ease-out-strong) backwards;
+    animation-delay: calc(150ms + var(--i, 0) * 60ms);
+  }
+}
+
+/* Reduced motion: the menu fades in and out (no wipe), and the links are simply there */
+@media (max-width: 1199px) and (prefers-reduced-motion: reduce) {
+  .navbar__links {
+    clip-path: none;
+    opacity: 0;
+    transition:
+      opacity 150ms ease,
+      visibility 0s linear 150ms;
+  }
+
+  .navbar--open .navbar__links {
+    clip-path: none;
+    opacity: 1;
+    transition:
+      opacity 150ms ease,
+      visibility 0s;
+  }
+
+  .navbar--open .navbar__links :is(.navbar__link, .button) {
+    animation: none;
+  }
+}

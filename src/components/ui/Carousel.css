@@ -1,0 +1,218 @@
+/* Figma: project carousels — 95px arrows, 30px from a fixed window, screens 50px apart */
+.carousel {
+  --carousel-gap: 3.125rem; /* 50px between screens and slides */
+  --carousel-dot: 0.75rem; /* dot size */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem; /* window/arrows → dots */
+  padding: 4.375rem var(--page-margin); /* 70px */
+  background: var(--color-dark);
+}
+
+/* Arrows on both sides of the window */
+.carousel__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.875rem; /* 30px */
+}
+
+.carousel__viewport {
+  width: var(--carousel-width);
+  height: var(--carousel-height);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* Swipe / drag: horizontal moves go to the carousel, vertical ones still scroll the page */
+.carousel__viewport--swipe {
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Centers the current slide; with a narrower slide the neighbors peek in at the edges.
+   While swiping, Carousel.jsx moves the track with an inline transform instead. */
+.carousel__track {
+  display: flex;
+  gap: var(--carousel-gap);
+  height: 100%;
+  transform: translateX(
+    calc(
+      (var(--carousel-width) - var(--carousel-slide)) / 2 - var(--carousel-position) *
+        (var(--carousel-slide) + var(--carousel-gap))
+    )
+  );
+  transition: transform var(--transition-slow);
+}
+
+.carousel__track--instant {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel__track {
+    transition: none;
+  }
+}
+
+.carousel__slide {
+  display: flex;
+  flex: 0 0 var(--carousel-slide);
+  justify-content: center;
+  gap: var(--carousel-gap);
+  height: 100%;
+}
+
+/* Images fade in once loaded (Carousel.jsx sets data-loaded), so slow-loading
+   screens don't pop in */
+.carousel__slide img {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+.carousel__slide img[data-loaded] {
+  opacity: 1;
+}
+
+/* Phone and web screens: full window height, natural width */
+.carousel--fit-height .carousel__slide img {
+  height: 100%;
+  width: auto;
+  min-width: 0;
+}
+
+/* Page mockups: share the slide width, top aligned */
+.carousel--fit-width .carousel__slide {
+  align-items: flex-start;
+}
+
+.carousel--fit-width .carousel__slide img {
+  flex: 1 1 0;
+  min-width: 0;
+  height: auto;
+}
+
+/* Photos of different shapes: each fits whole inside the slide box */
+.carousel--fit-contain .carousel__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Pixel art (game screenshots) stays sharp when scaled */
+.carousel__slide img.is-pixelated {
+  image-rendering: pixelated;
+}
+
+/* Arrows: default → hover (accent arrow) → click (accent circle, white arrow) */
+.carousel__arrow {
+  display: grid;
+  place-items: center;
+  width: 5.9375rem; /* 95px */
+  height: 5.9375rem;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-dark);
+  transition:
+    background-color var(--transition-slow),
+    color var(--transition-slow),
+    scale 160ms var(--ease-out-strong);
+}
+
+.carousel__arrow:hover {
+  color: var(--carousel-accent, var(--color-purple));
+}
+
+.carousel__arrow:active {
+  scale: 0.94; /* round button: same press as back to top */
+  background: var(--carousel-accent, var(--color-purple));
+  color: var(--color-white);
+  transition-duration: 0s; /* instant on press, eases out on release */
+}
+
+.carousel__arrow svg {
+  width: 2.5417rem; /* 40.67px */
+  height: 2.5417rem;
+}
+
+.carousel__arrow--next svg {
+  transform: rotate(180deg);
+}
+
+/* Dots: which slide is showing. The current one stretches into a pill in the
+   project color. Each button is bigger than its dot, for an easier tap. */
+.carousel__dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+}
+
+.carousel__dot {
+  display: grid;
+  place-items: center;
+  min-width: calc(var(--carousel-dot) * 2.25);
+  height: calc(var(--carousel-dot) * 2.25);
+  padding: 0;
+  border: none;
+  background: none;
+  transition: min-width var(--transition-slow);
+}
+
+.carousel__dot::before {
+  content: '';
+  width: var(--carousel-dot);
+  height: var(--carousel-dot);
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 35%);
+  transition:
+    width var(--transition-slow),
+    background-color var(--transition-slow);
+}
+
+.carousel__dot:hover::before {
+  background: rgb(255 255 255 / 70%);
+}
+
+.carousel__dot.is-current::before {
+  width: calc(var(--carousel-dot) * 2.5);
+  background: var(--carousel-accent, var(--color-purple));
+}
+
+.carousel__dot.is-current {
+  min-width: calc(var(--carousel-dot) * 3.5);
+}
+
+/* Tablet/phone: the images take the full width; swipe and the dots replace the arrows */
+@media (max-width: 1199px) {
+  .carousel {
+    --carousel-gap: 1rem;
+    --carousel-dot: 0.5rem;
+
+    gap: 1rem;
+    padding: 2rem 0; /* the window spans the screen so neighboring slides peek in */
+  }
+
+  .carousel__arrow {
+    display: none;
+  }
+}
+
+/* Swipe hint the pages play once the carousel is in (see Projects.css / Experiences.css):
+   the slides glide a little toward the next one and settle back */
+@keyframes carousel-nudge {
+  0%,
+  100% {
+    translate: 0;
+  }
+
+  40% {
+    translate: -14vw;
+  }
+}

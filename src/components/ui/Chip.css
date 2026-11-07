@@ -1,0 +1,62 @@
+/* Figma: Jump Links — Inter Medium 32/35, 69px tall */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.9375rem 2.1875rem; /* 15px 35px */
+  border: 2px solid var(--color-dark);
+  border-radius: var(--radius-pill);
+  background: var(--color-white); /* covers the next chip during the entrance */
+  font-family: var(--font-body);
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 2.1875rem;
+  white-space: nowrap;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    scale 160ms var(--ease-out-strong);
+}
+
+.chip:hover {
+  border-color: var(--color-purple);
+  background: var(--color-purple);
+  color: var(--color-white);
+}
+
+/* Presses in slightly (instant), eases back on release */
+.chip:active {
+  scale: 0.97;
+  transition-duration: 0s;
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.9375rem; /* 15px */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Page entrance: chips deal out, each from behind the previous one
+   (offsets from useDealOffsets, delays set inline) */
+.page-entrance .chip-list > li {
+  position: relative;
+  animation: intro-deal 550ms var(--ease-out-strong) backwards;
+}
+
+/* Tablet/phone sizes */
+@media (max-width: 1199px) {
+  .chip {
+    padding: 0.5rem 1.125rem;
+    border-width: 1.5px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .chip-list {
+    gap: 0.5rem;
+  }
+}

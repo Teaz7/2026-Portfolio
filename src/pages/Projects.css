@@ -1,0 +1,353 @@
+/* Figma: Projects (1920px frame). Comments give the Figma px values. */
+
+/* Header */
+.projects-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3.75rem; /* 60px below the nav */
+}
+
+.projects-header__title {
+  font-size: 9.125rem; /* 146px */
+  font-weight: 800;
+  line-height: 1.5;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Group labels: "◆ DEVELOPED PROJECTS" */
+.projects-group-label {
+  padding-top: 3.125rem; /* 50px */
+}
+
+/* Project */
+.project {
+  padding-top: 3.125rem; /* 50px */
+  padding-bottom: 3.125rem;
+}
+
+/* The last carousel runs straight into the Contact section */
+.projects-page > .project:last-child {
+  padding-bottom: 0;
+}
+
+/* Stays in place (top set by useStickyFit) while the carousel band slides over it */
+.project__main {
+  position: sticky;
+  z-index: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: 6.25rem; /* 100px above the carousel */
+}
+
+.project__content {
+  width: 76.375rem; /* 1222px */
+}
+
+/* Title and tags stay on one line, like Figma (may run past the 1222px column) */
+.project__head {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem; /* 10px */
+  width: max-content;
+}
+
+.project__head .tag-list {
+  flex-wrap: nowrap;
+}
+
+.project__title {
+  font-size: 4.75rem; /* 76px */
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.project__intro {
+  color: var(--color-purple);
+  font-family: var(--font-heading);
+  font-size: 1.875rem; /* 30px */
+  line-height: 2.8125rem; /* 45px */
+}
+
+.project__bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* 20px */
+  width: 70rem; /* 1120px */
+  margin: 2.1875rem 0 0; /* 35px */
+  padding: 0;
+  list-style: none;
+  font-size: 2rem; /* 32px */
+  line-height: 2.8125rem; /* 45px */
+}
+
+.project__bullets li {
+  position: relative;
+  padding-left: 3.5625rem; /* 57px */
+}
+
+.project__bullets li > span {
+  display: block;
+}
+
+/* Bullets Figma keeps on one line even past the 1120px width */
+.project__bullets li.is-nowrap {
+  white-space: nowrap;
+}
+
+/* 15px rounded diamond, centered on the first line */
+.project__bullets li::before {
+  content: '';
+  position: absolute;
+  top: 0.9375rem;
+  left: 0.55rem;
+  width: 0.9375rem;
+  height: 0.9375rem;
+  border-radius: 3px;
+  background: var(--color-purple);
+  transform: rotate(45deg);
+}
+
+/* Sidebar: Context / Roles / Scope */
+.project__side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.875rem; /* 30px */
+  width: 26.375rem; /* 422px */
+  margin: 4.9375rem 0 0; /* 79px */
+}
+
+.project__side-item {
+  border-top: 1px solid var(--color-dark);
+}
+
+.project__side-item dt {
+  color: var(--color-purple);
+  font-size: 1.25rem; /* 20px */
+  line-height: 2.8125rem;
+  text-transform: uppercase;
+}
+
+.project__side-item dd {
+  margin: 0;
+  font-size: 2rem; /* 32px */
+  font-weight: 600;
+  line-height: 2.8125rem;
+}
+
+.project__side-item dd.is-compact {
+  font-size: 1.875rem; /* 30px */
+}
+
+/* Tags cover the next one while they deal out */
+.project__head .tag {
+  background: var(--color-white);
+}
+
+/* Carousel band: slides over the content, covers the screen, then stays pinned.
+   The spacer after the stage is how long it stays pinned. */
+.project__track {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  transform: translateZ(0); /* own GPU layer, so it always paints above the content */
+  background: var(--color-dark);
+}
+
+.project__track::after {
+  content: '';
+  display: block;
+  height: 50svh; /* same short pin as Home */
+}
+
+.project__stage {
+  position: sticky; /* top set by useStickyFit */
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+}
+
+.project__carousel {
+  width: 100%;
+}
+
+/* Once the band covers the screen: the screens slide up from the bottom (ease in-out),
+   then both arrows and the dots rise together. --band-wait: extra delay if something
+   above is still animating. */
+.project__track--armed :is(.carousel__viewport, .carousel__arrow, .carousel__dots) {
+  opacity: 0;
+}
+
+.project__track--play .carousel__viewport {
+  --rise-from: 40svh;
+  animation: intro-rise-far 900ms var(--ease-in-out-strong) backwards;
+  animation-delay: var(--band-wait, 0ms);
+}
+
+.project__track--play :is(.carousel__arrow, .carousel__dots) {
+  animation: intro-rise 500ms var(--ease-out-strong) backwards;
+  animation-delay: calc(var(--band-wait, 0ms) + 700ms);
+}
+
+/* Content reveal (keyframes in IntroOverlay.css, delays set inline in Projects.jsx) */
+.project--armed .project__head .tag-list > li,
+.project--armed .project__intro,
+.project--armed .project__bullets li::before,
+.project--armed .project__bullets li > span,
+.project--armed .project__side-item {
+  opacity: 0;
+}
+
+.project--play .project__head .tag-list > li {
+  position: relative;
+  animation: intro-deal 500ms var(--ease-out-strong) backwards;
+}
+
+.project--play .project__intro {
+  animation: intro-wipe 700ms var(--ease-out-strong) backwards;
+}
+
+.project--play .project__bullets li::before {
+  animation: intro-bullet 600ms var(--ease-out-strong) backwards;
+  animation-delay: var(--bullet-delay);
+}
+
+.project--play .project__bullets li > span {
+  animation: intro-slide-right 550ms var(--ease-out-strong) backwards;
+  animation-delay: calc(var(--bullet-delay) + 250ms);
+}
+
+.project--play .project__side-item {
+  animation: intro-slide-left 600ms var(--ease-out-strong) backwards;
+}
+
+/* ---------- Tablet/phone ---------- */
+@media (max-width: 1199px) {
+  .projects-header {
+    margin-top: 2.5rem;
+  }
+
+  .projects-header__title {
+    font-size: clamp(2.5rem, 10vw, 5.5rem);
+    line-height: 1.1;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .projects-header nav {
+    margin-top: 1.25rem;
+  }
+
+  .projects-group-label {
+    padding-top: 2.5rem;
+  }
+
+  .project {
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
+  }
+
+  /* Text first, sidebar underneath */
+  .project__main {
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .project__content {
+    width: 100%;
+  }
+
+  .project__head {
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    width: auto;
+  }
+
+  .project__head .tag-list {
+    flex-wrap: wrap;
+  }
+
+  .project__title {
+    font-size: clamp(2rem, 7vw, 3.25rem);
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  .project__intro {
+    margin-top: 0.75rem;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .project__bullets {
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .project__bullets li {
+    padding-left: 1.75rem;
+  }
+
+  .project__bullets li.is-nowrap {
+    white-space: normal;
+  }
+
+  .project__bullets li::before {
+    top: 0.5rem;
+    left: 0.25rem;
+    width: 0.5625rem;
+    height: 0.5625rem;
+    border-radius: 2px;
+  }
+
+  /* Sidebar: Context / Roles / Scope side by side on tablets */
+  .project__side {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    margin: 0;
+  }
+
+  .project__side-item dt {
+    font-size: 0.8125rem;
+    line-height: 2;
+  }
+
+  .project__side-item dd,
+  .project__side-item dd.is-compact {
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+}
+
+/* Tablet/phone swipe hint: after the screens and dots are in, the carousel slides a
+   little toward the next slide and settles back (once each time the band plays) */
+@media (max-width: 1199px) and (prefers-reduced-motion: no-preference) {
+  .project__track--play .carousel__track {
+    animation: carousel-nudge 1100ms var(--ease-in-out-strong) backwards;
+    animation-delay: calc(var(--band-wait, 0ms) + 1400ms);
+  }
+}
+
+/* Phone: sidebar items stacked */
+@media (max-width: 639px) {
+  /* The text is taller than the screen here, so pinning it would let the band cover
+     the sidebar as soon as it scrolled into view. It scrolls normally instead and
+     the band follows it (static also ignores the top set by useStickyFit). */
+  .project__main {
+    position: static;
+  }
+
+  .project__side {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

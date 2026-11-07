@@ -1,111 +1,173 @@
+/*
+  Design tokens.
+  Sizes are taken from the 1920px Figma frame and written in rem (Figma px / 16).
+  The root font-size scales with the viewport, so the desktop layout keeps
+  the Figma proportions on any desktop width (1rem = 16px at 1920px).
+*/
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --color-purple: #9458bc;
+  --color-dark: #2b2b2b;
+  --color-white: #ffffff;
+  --color-text: #2b2b2b;
+  --color-overlay: rgb(20 20 20 / 92%);
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* Project accents (carousel arrows) */
+  --color-tibiao: #57bf2e;
+  --color-aibrecare: #f87f7f;
+  --color-cozytask: #3ca8d6;
+  --color-lagawta: #1fc8cc;
+  --color-agrilinko: #47dc95;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
 
-  @media (max-width: 1024px) {
+  --fs-display: 8rem;   /* 128px  LET'S CONNECT!, page titles */
+  --fs-h2: 3.5rem;      /* 56px   project / award titles */
+  --fs-label: 2rem;     /* 32px   ◆ section labels */
+  --fs-xl: 2rem;        /* 32px   large buttons */
+  --fs-lg: 1.75rem;     /* 28px   intro / body large */
+  --fs-md: 1.5rem;      /* 24px   nav, body */
+  --fs-base: 1.25rem;   /* 20px   tags, small body */
+  --fs-sm: 1rem;        /* 16px   captions, footer */
+
+  /* 8px spacing scale */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-6: 3rem;
+  --space-10: 5rem;
+  --space-15: 7.5rem;
+  --space-20: 10rem;
+
+  --page-margin: 5rem; /* 80px layout guide */
+  --content-max: 120rem; /* 1920px */
+
+  --radius-sm: 0.75rem;
+  --radius-md: 1.5rem;
+  --radius-pill: 999px;
+
+  /* All hover / click animations */
+  --transition: 250ms ease-out;
+  --transition-slow: 300ms ease-out;
+
+  /* Page-load intro */
+  --ease-out-strong: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-strong: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1); /* iOS-like: panels sliding in/out (mobile menu) */
+}
+
+/* Smooth scrolling is handled by Lenis (components/layout/Layout.jsx) */
+html {
+  font-size: clamp(10px, calc(100vw / 120), 16px); /* desktop scales down to 1200px wide */
+  /* No scroll anchoring: Chrome nudging the scroll position while content animates
+     fights Lenis's smooth scrolls (back to top would stall partway) */
+  overflow-anchor: none;
+  /* Elements sliding in from the side poke past the screen edge for a moment; on
+     phones that would widen the page and zoom it out. Clipped here and on body
+     (clip, unlike hidden, keeps sticky elements working). */
+  overflow-x: clip;
+}
+
+/*
+  Responsive. Breakpoints (media queries can't use variables):
+  - 1200px and up: the desktop layout, scaled with the root font-size above
+  - 1199px and below (tablets incl. iPad Pro, phones): layouts reflow; 1rem is a
+    fixed 16px and components switch to mobile sizes in @media (max-width: 1199px)
+  - 639px and below (phone): extra tweaks in @media (max-width: 639px)
+*/
+@media (max-width: 1199px) {
+  html {
     font-size: 16px;
+  }
+
+  :root {
+    --page-margin: 2rem; /* 32px */
+    --fs-display: 3.5rem;
   }
 }
 
-@media (prefers-color-scheme: dark) {
+@media (max-width: 639px) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    --page-margin: 1.25rem; /* 20px */
+    --fs-display: 2.5rem;
   }
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* No visible scrollbars anywhere (scrolling still works). Also keeps 100vw equal
+   to the visible width, so the layout never overflows sideways. */
+* {
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  overflow-x: clip; /* never scroll sideways (clip keeps sticky elements working) */
+  background: var(--color-white);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
+h2,
+h3,
+h4,
 p {
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  line-height: 1.1;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-purple);
+  outline-offset: 3px;
+}
+
+/* Anchored sections (#contact, project jump links) */
+[id] {
+  scroll-margin-top: var(--space-4);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }

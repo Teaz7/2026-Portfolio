@@ -1,0 +1,216 @@
+/*
+  The purple panel (PageTransition.jsx). It's 160vw wide with 30vw soft gradient
+  edges, so a fully purple 100vw sits in the middle.
+  - intro (first load, 1500ms): sweep in 0–645ms, hold until 855ms, slide away
+  - between pages: --cover sweeps in, --hold stays, --reveal slides away
+*/
+.intro-overlay-frame {
+  position: fixed;
+  inset: 0;
+  z-index: 900; /* under the custom cursor */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.intro-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 160vw;
+  background: linear-gradient(
+    to right,
+    rgb(148 88 188 / 0%) 0%,
+    var(--color-purple) 18.75%,
+    var(--color-purple) 81.25%,
+    rgb(148 88 188 / 0%) 100%
+  );
+  animation: intro-sweep 1500ms both;
+}
+
+.intro-overlay--cover {
+  animation: intro-sweep-in 650ms var(--ease-in-out-strong) both;
+}
+
+.intro-overlay--hold {
+  animation: none;
+  transform: translateX(-30vw);
+}
+
+.intro-overlay--reveal {
+  animation: intro-sweep-out 650ms var(--ease-in-out-strong) both;
+}
+
+@keyframes intro-sweep-in {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-30vw);
+  }
+}
+
+@keyframes intro-sweep-out {
+  from {
+    transform: translateX(-30vw);
+  }
+  to {
+    transform: translateX(-160vw);
+  }
+}
+
+@keyframes intro-sweep {
+  0% {
+    transform: translateX(100vw);
+    animation-timing-function: var(--ease-in-out-strong);
+  }
+  43%,
+  57% {
+    transform: translateX(-30vw);
+    animation-timing-function: var(--ease-in-out-strong);
+  }
+  100% {
+    transform: translateX(-160vw);
+  }
+}
+
+/* Shared entrance keyframes (navbar, home hero). They only set the start state;
+   elements use fill-mode "backwards" so hover/click styles take over afterwards. */
+@keyframes intro-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+}
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+}
+
+@keyframes intro-slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(5rem);
+  }
+}
+
+/* Chips / tags dealing out from behind the previous one (offsets from useDealOffsets) */
+@keyframes intro-deal {
+  from {
+    opacity: 0;
+    transform: translate(var(--deal-x, 0), var(--deal-y, 0));
+  }
+}
+
+/* Bullet text sliding in from the left */
+@keyframes intro-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+}
+
+/* Bullet diamond: fades in as a square, then turns */
+@keyframes intro-bullet {
+  0% {
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  45% {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(45deg);
+  }
+}
+
+/* Lines drawing from left to right */
+@keyframes intro-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+/* Clip from one inset to another (set per element as --clip-from / --clip-to) */
+@keyframes intro-clip {
+  from {
+    clip-path: var(--clip-from);
+  }
+  to {
+    clip-path: var(--clip-to);
+  }
+}
+
+/* Bigger rise for band content; distance from --rise-from (uses `translate`, so it
+   doesn't clash with hover transforms) */
+@keyframes intro-rise-far {
+  from {
+    opacity: 0;
+    translate: 0 var(--rise-from, 6rem);
+  }
+}
+
+/* Dark section showing at the bottom on load: slides up after the sweep
+   (useIntroSlideUp sets --slide-from / --slide-delay). Uses `translate`, so it
+   doesn't replace the element's own transform. */
+.intro-slide-up {
+  animation: intro-slide-up 900ms var(--ease-out-strong) backwards;
+  animation-delay: var(--slide-delay, 1500ms);
+}
+
+.intro-slide-up-wait {
+  translate: 0 var(--slide-from, 100vh);
+}
+
+@keyframes intro-slide-up {
+  from {
+    translate: 0 var(--slide-from, 100vh);
+  }
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Section label diamond: slides in as a square, then turns into the diamond */
+@keyframes intro-diamond {
+  0% {
+    opacity: 0;
+    transform: translateX(-1.5rem) rotate(0deg);
+  }
+  45% {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateX(0) rotate(45deg);
+  }
+}
+
+/* Soft-edged wipe from the left. The mask only exists while the animation runs,
+   so the element doesn't keep an extra GPU layer afterwards. */
+@keyframes intro-wipe {
+  from,
+  to {
+    -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+    mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+    -webkit-mask-size: 250% 100%;
+    mask-size: 250% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+  from {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}

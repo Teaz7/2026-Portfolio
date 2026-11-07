@@ -1,0 +1,90 @@
+/*
+  Purple circle with a thin white ring, so it stays visible on white pages, the
+  dark bands and the purple Contact section. Hover turns it black (like the
+  primary buttons); it presses in slightly on click.
+*/
+.scroll-top {
+  position: fixed;
+  right: 2.5rem;
+  bottom: 2.5rem;
+  z-index: 800; /* above page content, under the intro sweep and cursor */
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-purple);
+  box-shadow:
+    0 0 0 2px var(--color-white),
+    0 0.5rem 1.5rem rgb(0 0 0 / 18%);
+  color: var(--color-white);
+  cursor: pointer;
+
+  /* Hidden: faded out, slightly lower; visibility switches after the fade */
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 1rem;
+  transition:
+    opacity var(--transition),
+    translate var(--transition),
+    visibility 0s linear 250ms,
+    background-color var(--transition),
+    scale 150ms ease-out;
+}
+
+.scroll-top--visible {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition-delay: 0s;
+}
+
+.scroll-top:hover {
+  background: var(--color-dark);
+}
+
+.scroll-top:active {
+  scale: 0.94;
+  transition-duration: 0s; /* instant on press, eases out on release */
+}
+
+.scroll-top:focus-visible {
+  outline: 3px solid var(--color-purple);
+  outline-offset: 4px;
+}
+
+.scroll-top__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  stroke-width: 2.5;
+  transition: translate var(--transition);
+}
+
+/* Arrow nudges up on hover */
+.scroll-top:hover .scroll-top__icon {
+  translate: 0 -0.125rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-top,
+  .scroll-top__icon {
+    translate: none;
+  }
+}
+
+/* Tablet/phone: smaller, closer to the corner */
+@media (max-width: 1199px) {
+  .scroll-top {
+    right: var(--page-margin);
+    bottom: 1.25rem;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .scroll-top__icon {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+}

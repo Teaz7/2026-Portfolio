@@ -1,0 +1,55 @@
+/* Figma: Tag 1, Inter Medium 20/35, 49px tall */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid var(--color-purple);
+  border-radius: var(--radius-pill);
+  color: var(--color-purple);
+  font-family: var(--font-body);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tag--md {
+  padding: 0.3125rem 1.25rem;
+  font-size: 1.25rem;
+  line-height: 2.1875rem;
+}
+
+.tag--sm {
+  padding: 0.375rem 1rem;
+  font-size: var(--fs-sm);
+  line-height: 1.2;
+}
+
+/* Figma: Tag 4, coursework on the dark About Me section */
+.tag--light {
+  border-color: var(--color-white);
+  color: var(--color-white);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.125rem 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Tablet/phone sizes */
+@media (max-width: 1199px) {
+  .tag {
+    border-width: 1.5px;
+  }
+
+  .tag--md {
+    padding: 0.25rem 0.875rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .tag-list {
+    gap: 0.5rem;
+  }
+}

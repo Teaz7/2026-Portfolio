@@ -1,0 +1,202 @@
+/* Figma: Contact, 1920×660 */
+.contact {
+  padding-top: 10.6875rem;
+  padding-bottom: 2.8125rem;
+  background: var(--color-purple);
+  color: var(--color-white);
+}
+
+.contact__inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.contact__main {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact__heading {
+  margin-top: -0.543rem;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  font-size: var(--fs-display);
+  font-weight: 800;
+  line-height: 1.5;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.contact__links {
+  display: flex;
+  gap: 1.8rem;
+  margin: -0.625rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 2.1875rem;
+}
+
+.contact__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9375rem;
+}
+
+.contact__links a:hover {
+  text-decoration: underline;
+}
+
+.contact__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.3125rem;
+  width: 41.125rem;
+  margin-top: 2.1875rem;
+  text-align: center;
+}
+
+/* Browsers render this slightly wider than Figma; the extra room keeps it on 2 lines */
+.contact__pitch {
+  margin-inline: -1.5rem;
+  font-size: 1.875rem;
+  font-weight: 500;
+  line-height: 2.1875rem;
+}
+
+.contact__actions {
+  display: flex;
+  gap: 0.625rem;
+}
+
+/* Email ↔ "Copied!" cross-fade; both versions share one grid cell */
+.contact__copy-label,
+.contact__copy-icon {
+  display: inline-grid;
+}
+
+.contact__copy-label > *,
+.contact__copy-icon > * {
+  grid-area: 1 / 1;
+  transition: opacity var(--transition-slow);
+}
+
+.contact__copy-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.copy-done,
+.is-copied .copy-default {
+  opacity: 0;
+}
+
+.is-copied .copy-done {
+  opacity: 1;
+}
+
+.contact__availability,
+.contact__copyright {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 2.1875rem;
+}
+
+.contact__copyright {
+  margin-top: 9.5rem;
+}
+
+/* Scroll reveal (keyframes in IntroOverlay.css, delays set inline in ContactSection.jsx) */
+.contact--armed .contact__links,
+.contact--armed .contact__pitch,
+.contact--armed .contact__button,
+.contact--armed .contact__availability {
+  opacity: 0;
+}
+
+.contact--play .contact__links {
+  animation: intro-wipe 700ms var(--ease-out-strong) backwards;
+}
+
+.contact--play .contact__pitch,
+.contact--play .contact__availability {
+  animation: intro-fade 600ms ease-out backwards;
+}
+
+.contact--play .contact__button {
+  animation: intro-slide-left 600ms var(--ease-out-strong) backwards;
+}
+
+/* Tablet/phone: one column, everything left-aligned */
+@media (max-width: 1199px) {
+  .contact {
+    padding-top: 4.5rem;
+    padding-bottom: 5.5rem; /* room under the copyright for the back-to-top button */
+  }
+
+  .contact__inner {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .contact__heading {
+    margin-top: 0.25rem;
+    font-size: clamp(3.25rem, 14vw, 5.5rem);
+    line-height: 1.05;
+    white-space: normal;
+  }
+
+  .contact__links {
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .contact__links a {
+    gap: 0.5rem;
+  }
+
+  .contact__aside {
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 0;
+    text-align: left;
+  }
+
+  .contact__pitch {
+    margin-inline: 0;
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+
+  .contact__actions {
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+
+  .contact__availability,
+  .contact__copyright {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .contact__copyright {
+    margin-top: 3rem;
+  }
+}
+
+/* Phone: buttons stacked, at their natural width (leaves the right edge clear
+   for the back-to-top button) */
+@media (max-width: 639px) {
+  .contact__actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
