@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import './Carousel.css'
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -7,7 +7,11 @@ const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: r
 // and how far (or how fast) a release has to be to change slides
 const DRAG_START = 6 // px
 const SWIPE_DISTANCE = 0.18 // share of the window width
-const SWIPE_SPEED = 0.4 // px per ms (a quick flick)
+// A flick is judged by how fast the finger is moving as it lets go (over the last
+// VELOCITY_WINDOW ms), not the average since it touched down: a drag that starts
+// slow and ends with a flick still counts, and one that stops before release doesn't
+const FLICK_SPEED = 0.11 // px per ms
+const VELOCITY_WINDOW = 100 // ms
 
 // Arrow from the Figma carousel buttons (points left; flipped for "next")
 function ArrowIcon() {
@@ -37,52 +41,108 @@ function ArrowIcon() {
   Loops in one direction: a copy of the last slide sits before the first and a copy
   of the first after the last. After sliding onto a copy, the track jumps
   (without animation) to the real slide.
+
+  Interruptible: a swipe, arrow click or dot tap while a slide is still moving
+  retargets it from where it is (the CSS transition picks up mid-way), so quick
+  flicks in a row each count. Two copies sit on each side so a quick run of flicks
+  past either end still has somewhere to go before the jump back.
 */
 function Carousel({ slides, label, width, height, slideWidth = width, fit = 'height', accent }) {
   const count = slides.length
   const loops = count > 1
-  const track = loops ? [slides[count - 1], ...slides, slides[0]] : slides
+  const copies = loops ? Math.min(2, count) : 0
+  const track = loops ? [...slides.slice(-copies), ...slides, ...slides.slice(0, copies)] : slides
+  const lastIndex = track.length - 1
 
-  const [position, setPosition] = useState(loops ? 1 : 0)
-  const [animating, setAnimating] = useState(false)
+  const [position, setPositionState] = useState(copies)
+  const positionRef = useRef(copies) // latest target, also between renders
+  const setPosition = (value) => {
+    positionRef.current = value
+    setPositionState(value)
+  }
   const [instant, setInstant] = useState(false)
-  const [dragOffset, setDragOffset] = useState(null) // px while a finger/mouse drags
+  const [dragging, setDragging] = useState(false)
   const drag = useRef(null)
+  const trackRef = useRef(null)
 
-  // Real slide on screen (0-based), also while sitting on a copy
-  const current = loops ? (position - 1 + count) % count : 0
+  /*
+    While dragging, the finger moves the track directly (an inline transform set in
+    onPointerMove): no React render or style recalculation of the slides per move.
+    React only renders when the drag starts and ends. The inline transform is
+    removed in the same frame the release (next slide, or back) is rendered, so the
+    track eases on from exactly where the finger let go.
+  */
+  useLayoutEffect(() => {
+    const element = trackRef.current
+    if (dragging || !element) return
+    element.style.transform = ''
+    element.style.transition = ''
+  }, [dragging, position])
+
+  // Real slide (0-based) for any track position, copies included
+  const realIndex = (value) => (((value - copies) % count) + count) % count
+  const current = loops ? realIndex(position) : 0
 
   const go = (step) => {
-    if (animating || step === 0) return
+    if (step === 0 || drag.current?.moved) return
     if (prefersReducedMotion()) {
       setInstant(true)
-      setPosition((value) => ((((value - 1 + step) % count) + count) % count) + 1)
+      setPosition(copies + realIndex(positionRef.current + step))
       return
     }
+    const target = positionRef.current + step
+    if (target < 0 || target > lastIndex) return // past the copies: only on a very long burst
     setInstant(false)
-    setAnimating(true)
-    setPosition((value) => value + step)
+    setPosition(target)
   }
 
+  // Dot tap: the closest track position showing that slide (a copy, if the track is
+  // near one), so it never spins the long way round
+  const goTo = (index) => {
+    const from = positionRef.current
+    const options = [-count, 0, count]
+      .map((shift) => copies + index + shift)
+      .filter((value) => value >= 0 && value <= lastIndex)
+    const target = options.reduce((best, value) =>
+      Math.abs(value - from) < Math.abs(best - from) ? value : best,
+    )
+    go(target - from)
+  }
+
+  // Once the slide settles on a copy, jump (without animation) to the real slide
   const handleTransitionEnd = (event) => {
-    if (event.target !== event.currentTarget) return
-    setAnimating(false)
-    if (position === 0 || position === count + 1) {
+    if (event.target !== event.currentTarget || event.propertyName !== 'transform') return
+    const value = positionRef.current
+    if (value < copies || value >= copies + count) {
       setInstant(true)
-      setPosition(position === 0 ? count : 1)
+      setPosition(copies + realIndex(value))
     }
+  }
+
+  // Where `position` puts the track, and where it's drawn right now (px). They differ
+  // while a slide is still moving; a drag starts from where it's drawn, no jump.
+  const measureTrack = () => {
+    const element = trackRef.current
+    const [first, second] = element.children
+    const pitch = second.offsetLeft - first.offsetLeft // slide width + gap
+    const viewport = element.parentElement.clientWidth
+    const targetX = (viewport - first.offsetWidth) / 2 - positionRef.current * pitch
+    const currentX = new DOMMatrixReadOnly(getComputedStyle(element).transform).m41
+    return { targetX, currentX }
   }
 
   // Swipe / drag. touch-action: pan-y (Carousel.css) leaves vertical swipes to page
   // scrolling; the browser cancels the pointer when it takes a gesture over.
   const onPointerDown = (event) => {
-    if (!loops || animating || (event.pointerType === 'mouse' && event.button !== 0)) return
+    if (!loops || (event.pointerType === 'mouse' && event.button !== 0)) return
     drag.current = {
       id: event.pointerId,
       x: event.clientX,
-      time: event.timeStamp,
+      samples: [{ x: event.clientX, t: event.timeStamp }], // recent finger positions
       width: event.currentTarget.offsetWidth,
       moved: false,
+      targetX: 0,
+      from: 0,
     }
   }
 
@@ -93,10 +153,18 @@ function Carousel({ slides, label, width, height, slideWidth = width, fit = 'hei
     if (!state.moved) {
       if (Math.abs(dx) < DRAG_START) return
       state.moved = true
+      const { targetX, currentX } = measureTrack()
+      state.targetX = targetX
+      state.from = currentX - targetX // catch the slide mid-way if it's still moving
+      trackRef.current.style.transition = 'none' // follow the finger from the first move
       event.currentTarget.setPointerCapture(event.pointerId)
       setInstant(false)
+      setDragging(true)
     }
-    setDragOffset(Math.max(-state.width, Math.min(state.width, dx)))
+    state.samples.push({ x: event.clientX, t: event.timeStamp })
+    if (state.samples.length > 20) state.samples.shift()
+    const offset = Math.max(-state.width, Math.min(state.width, state.from + dx))
+    trackRef.current.style.transform = `translateX(${state.targetX + offset}px)`
   }
 
   const endDrag = (event, released) => {
@@ -105,14 +173,22 @@ function Carousel({ slides, label, width, height, slideWidth = width, fit = 'hei
     drag.current = null
     if (!state.moved) return
     const dx = event.clientX - state.x
-    const speed = Math.abs(dx) / Math.max(1, event.timeStamp - state.time)
-    const far = Math.abs(dx) > state.width * SWIPE_DISTANCE
-    const flick = speed > SWIPE_SPEED && Math.abs(dx) > 20
-    setDragOffset(null) // eases on to the next slide, or back if the swipe was too short
-    if (released && (far || flick)) go(dx < 0 ? 1 : -1)
-  }
 
-  const dragging = dragOffset !== null
+    // Release velocity: from the oldest sample within the last VELOCITY_WINDOW ms
+    const now = event.timeStamp
+    const since = state.samples.find((sample) => now - sample.t <= VELOCITY_WINDOW)
+    const velocity = since && now > since.t ? (event.clientX - since.x) / (now - since.t) : 0
+    const flick = Math.abs(velocity) > FLICK_SPEED
+    const far = Math.abs(dx) > state.width * SWIPE_DISTANCE
+
+    // A flick goes the way it was dragged; pulling back as you let go (moving
+    // against the drag) cancels it, so the slide settles back. Without a flick, a
+    // long enough drag goes the way it was dragged.
+    const flickDirection = Math.sign(velocity) === Math.sign(dx) ? Math.sign(dx) : 0
+    const direction = flick ? flickDirection : far ? Math.sign(dx) : 0
+    setDragging(false) // eases on to the next slide, or back if the swipe was too short
+    if (released && direction !== 0) go(direction < 0 ? 1 : -1)
+  }
 
   return (
     <section
@@ -124,7 +200,6 @@ function Carousel({ slides, label, width, height, slideWidth = width, fit = 'hei
         '--carousel-height': height,
         '--carousel-slide': slideWidth,
         '--carousel-position': position,
-        '--carousel-drag': `${dragOffset ?? 0}px`,
         '--carousel-accent': accent,
       }}
     >
@@ -143,12 +218,13 @@ function Carousel({ slides, label, width, height, slideWidth = width, fit = 'hei
           onPointerCancel={(event) => endDrag(event, false)}
         >
           <div
+            ref={trackRef}
             className={`carousel__track${instant || dragging ? ' carousel__track--instant' : ''}`}
             onTransitionEnd={handleTransitionEnd}
           >
             {track.map((images, trackIndex) => {
-              const isCopy = loops && (trackIndex === 0 || trackIndex === count + 1)
-              const slideNumber = loops ? ((trackIndex - 1 + count) % count) + 1 : trackIndex + 1
+              const isCopy = loops && (trackIndex < copies || trackIndex >= copies + count)
+              const slideNumber = loops ? realIndex(trackIndex) + 1 : trackIndex + 1
               return (
                 <div
                   key={trackIndex}
@@ -194,7 +270,7 @@ function Carousel({ slides, label, width, height, slideWidth = width, fit = 'hei
               className={`carousel__dot${index === current ? ' is-current' : ''}`}
               aria-label={`Slide ${index + 1} of ${count}`}
               aria-current={index === current ? 'true' : undefined}
-              onClick={() => go(index + 1 - position)}
+              onClick={() => goTo(index)}
             />
           ))}
         </div>

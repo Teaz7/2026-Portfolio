@@ -34,7 +34,7 @@
 }
 
 /* Centers the current slide; with a narrower slide the neighbors peek in at the edges.
-   --carousel-drag follows the finger while swiping. */
+   While swiping, Carousel.jsx moves the track with an inline transform instead. */
 .carousel__track {
   display: flex;
   gap: var(--carousel-gap);
@@ -42,7 +42,7 @@
   transform: translateX(
     calc(
       (var(--carousel-width) - var(--carousel-slide)) / 2 - var(--carousel-position) *
-        (var(--carousel-slide) + var(--carousel-gap)) + var(--carousel-drag, 0px)
+        (var(--carousel-slide) + var(--carousel-gap))
     )
   );
   transition: transform var(--transition-slow);

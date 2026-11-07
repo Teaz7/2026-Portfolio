@@ -491,11 +491,14 @@
     box-shadow var(--transition);
 }
 
-.exp-certs__grid--lg .exp-tile:hover,
-.exp-certs__grid--sm .exp-tile:hover {
-  z-index: 1;
-  transform: scale(1.15);
-  box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 25%);
+/* Only with a real mouse/trackpad: on touch screens a tap would leave it stuck zoomed */
+@media (hover: hover) and (pointer: fine) {
+  .exp-certs__grid--lg .exp-tile:hover,
+  .exp-certs__grid--sm .exp-tile:hover {
+    z-index: 1;
+    transform: scale(1.15);
+    box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 25%);
+  }
 }
 
 /* Tags cover the next one while they deal out */
@@ -583,11 +586,13 @@
     box-shadow var(--transition);
 }
 
-.exp-stage .exp-tile:hover,
-.exp-certs__grid--md .exp-tile:hover {
-  z-index: 1;
-  transform: scale(1.05);
-  box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 30%);
+@media (hover: hover) and (pointer: fine) {
+  .exp-stage .exp-tile:hover,
+  .exp-certs__grid--md .exp-tile:hover {
+    z-index: 1;
+    transform: scale(1.05);
+    box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 30%);
+  }
 }
 
 /* ---------- Tablet/phone ---------- */
@@ -840,13 +845,6 @@
     font-size: 0.875rem;
     line-height: 1.4;
     white-space: normal;
-  }
-
-  /* No hover zoom on touch screens (a tap would leave it stuck zoomed) */
-  .exp-certs__grid .exp-tile:hover,
-  .exp-stage .exp-tile:hover {
-    transform: none;
-    box-shadow: none;
   }
 }
 
