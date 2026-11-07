@@ -58,10 +58,39 @@
 
 /* Smooth scrolling is handled by Lenis (components/layout/Layout.jsx) */
 html {
-  font-size: clamp(10px, calc(100vw / 120), 16px);
+  font-size: clamp(10px, calc(100vw / 120), 16px); /* desktop scales down to 1200px wide */
   /* No scroll anchoring: Chrome nudging the scroll position while content animates
      fights Lenis's smooth scrolls (back to top would stall partway) */
   overflow-anchor: none;
+  /* Elements sliding in from the side poke past the screen edge for a moment; on
+     phones that would widen the page and zoom it out. Clipped here and on body
+     (clip, unlike hidden, keeps sticky elements working). */
+  overflow-x: clip;
+}
+
+/*
+  Responsive. Breakpoints (media queries can't use variables):
+  - 1200px and up: the desktop layout, scaled with the root font-size above
+  - 1199px and below (tablets incl. iPad Pro, phones): layouts reflow; 1rem is a
+    fixed 16px and components switch to mobile sizes in @media (max-width: 1199px)
+  - 639px and below (phone): extra tweaks in @media (max-width: 639px)
+*/
+@media (max-width: 1199px) {
+  html {
+    font-size: 16px;
+  }
+
+  :root {
+    --page-margin: 2rem; /* 32px */
+    --fs-display: 3.5rem;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --page-margin: 1.25rem; /* 20px */
+    --fs-display: 2.5rem;
+  }
 }
 
 /* No visible scrollbars anywhere (scrolling still works). Also keeps 100vw equal

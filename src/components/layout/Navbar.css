@@ -86,3 +86,134 @@
 .navbar--intro .navbar__links > li {
   animation: intro-drop 550ms var(--ease-out-strong) backwards;
 }
+
+/* Menu button: only below 1200px */
+.navbar__toggle {
+  display: none;
+}
+
+@media (max-width: 1199px) {
+  .navbar {
+    padding-top: 1.25rem;
+  }
+
+  .navbar__inner {
+    height: 3rem;
+  }
+
+  .navbar__logo {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .navbar__title {
+    font-size: 1.125rem;
+  }
+
+  .navbar__subtitle {
+    margin-top: -0.25rem;
+    font-size: 0.6875rem;
+  }
+
+  /* Round black button fixed in the top-right corner (the white ring keeps it
+     visible on dark sections); sits above the open menu so it also closes it */
+  .navbar__toggle {
+    position: fixed;
+    top: 1rem;
+    right: var(--page-margin);
+    z-index: 860;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-dark);
+    box-shadow:
+      0 0 0 2px var(--color-white),
+      0 0.5rem 1.5rem rgb(0 0 0 / 18%);
+    color: var(--color-white);
+    cursor: pointer;
+    transition:
+      background-color var(--transition),
+      scale 150ms ease-out;
+  }
+
+  .navbar__toggle:hover {
+    color: var(--color-purple);
+  }
+
+  .navbar__toggle:active {
+    scale: 0.94;
+    transition-duration: 0s;
+  }
+
+  .navbar__toggle svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .navbar--open .navbar__toggle {
+    box-shadow: 0 0 0 2px var(--color-purple);
+  }
+
+  /* The links become a full-screen black menu that wipes in from the right */
+  .navbar__links {
+    position: fixed;
+    inset: 0;
+    z-index: 850;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.25rem;
+    padding: 0 var(--page-margin);
+    background: var(--color-dark);
+    clip-path: inset(0 0 0 100%);
+    visibility: hidden;
+    transition:
+      clip-path 450ms var(--ease-in-out-strong),
+      visibility 0s linear 450ms;
+  }
+
+  .navbar--open .navbar__links {
+    clip-path: inset(0);
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .navbar__link {
+    color: var(--color-white);
+    font-size: 2.25rem;
+    font-weight: 600;
+  }
+
+  /* Current page in purple (underline included) */
+  .navbar__link:hover,
+  .navbar__link.active {
+    color: var(--color-purple);
+  }
+
+  .navbar__link.active::after {
+    bottom: -0.25rem;
+    height: 0.3125rem;
+  }
+
+  .navbar__links .button--sm {
+    margin-top: 1rem;
+    font-size: 1.25rem;
+    padding: 0.625rem 1.5rem;
+  }
+
+  /* Purple Contact button: white text on hover (its usual black hover would vanish) */
+  .navbar__links .button--sm:hover {
+    background: var(--color-white);
+    color: var(--color-purple);
+  }
+
+  /* Links rise in one after another as the menu opens (--i set per item) */
+  .navbar--open .navbar__links :is(.navbar__link, .button) {
+    animation: intro-rise 500ms var(--ease-out-strong) backwards;
+    animation-delay: calc(150ms + var(--i, 0) * 60ms);
+  }
+}

@@ -37,3 +37,19 @@
 .section-label--play .section-label__diamond {
   animation: intro-diamond 700ms var(--ease-out-strong) backwards;
 }
+
+/* Tablet/phone sizes */
+@media (max-width: 1199px) {
+  .section-label {
+    gap: 0.75rem;
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+
+  .section-label__diamond {
+    width: 0.875rem;
+    height: 0.875rem;
+    margin: 0.1875rem;
+    border-radius: 0.1875rem;
+  }
+}

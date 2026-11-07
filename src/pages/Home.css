@@ -197,3 +197,127 @@
 .home-projects--play .home-projects__icons > li {
   animation: intro-rise 550ms var(--ease-out-strong) backwards;
 }
+
+/* ---------- Tablet/phone ---------- */
+@media (max-width: 1199px) {
+  .hero {
+    margin-top: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .hero__name {
+    font-size: clamp(2.5rem, 10vw, 5.5rem);
+    line-height: 1.05;
+    white-space: normal;
+  }
+
+  .hero__subtitle {
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  /* Tablet: text and photo side by side, like desktop */
+  .hero__body {
+    align-items: flex-start;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .hero__photo {
+    width: 38%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    border-radius: 1.5rem;
+  }
+
+  .hero__content {
+    flex: 1;
+    gap: 2rem;
+    width: auto;
+  }
+
+  .hero__bio {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .hero__tags {
+    gap: 0.5rem;
+  }
+
+  .hero__tag-row {
+    flex-wrap: wrap;
+  }
+
+  .hero__actions {
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .hero__socials {
+    gap: 1.25rem;
+  }
+
+  .hero__socials img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  /* Projects & Designs */
+  .home-projects__inner {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .home-projects__title {
+    font-size: clamp(2.25rem, 9vw, 5rem);
+    line-height: 1.1;
+    white-space: normal;
+  }
+
+  .home-projects__text {
+    width: 100%;
+    max-width: 40rem;
+    margin-top: 1.25rem;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  /* Tool icons, the button and tech icons stack (button in the middle) */
+  .home-projects__row {
+    flex-direction: column;
+    gap: 1.75rem;
+    margin-top: 2.5rem;
+  }
+
+  .home-projects__icons {
+    width: auto;
+    column-gap: 1.5rem;
+    zoom: 0.7;
+  }
+}
+
+/* Phone: photo first, then the text */
+@media (max-width: 639px) {
+  .hero {
+    margin-top: 2rem;
+  }
+
+  .hero__body {
+    flex-direction: column;
+  }
+
+  .hero__photo {
+    order: -1;
+    width: 100%;
+    aspect-ratio: 4 / 3.4;
+    border-radius: 1.25rem;
+  }
+
+  .hero__content {
+    width: 100%;
+  }
+}

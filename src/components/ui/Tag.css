@@ -36,3 +36,20 @@
   padding: 0;
   list-style: none;
 }
+
+/* Tablet/phone sizes */
+@media (max-width: 1199px) {
+  .tag {
+    border-width: 1.5px;
+  }
+
+  .tag--md {
+    padding: 0.25rem 0.875rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .tag-list {
+    gap: 0.5rem;
+  }
+}

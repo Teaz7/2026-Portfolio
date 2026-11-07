@@ -39,3 +39,17 @@
   position: relative;
   animation: intro-deal 550ms var(--ease-out-strong) backwards;
 }
+
+/* Tablet/phone sizes */
+@media (max-width: 1199px) {
+  .chip {
+    padding: 0.5rem 1.125rem;
+    border-width: 1.5px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .chip-list {
+    gap: 0.5rem;
+  }
+}

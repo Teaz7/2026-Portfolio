@@ -38,13 +38,17 @@ export function useScrollReveal({
     const update = () => {
       // Not while scrolling to the top or while a page transition covers the page
       if (!ref.current || isPriorityScroll() || isTransitionPending()) return
-      const top = ref.current.getBoundingClientRect().top / window.innerHeight
+      const rect = ref.current.getBoundingClientRect()
+      const top = rect.top / window.innerHeight
+      // Also play once it's entirely on screen: on tall screens the page can end
+      // before a short section (like Contact) reaches its playAt point
+      const reached = top <= playAt || (rect.top >= 0 && rect.bottom <= window.innerHeight + 1)
       // Resets (content already off-screen) run at low priority, so a batch of
       // them, e.g. after back to top, doesn't freeze a frame
       const resetting = resetAtTop ? window.scrollY <= 1 : top >= resetAt
       const apply = () =>
         setReveal((current) => {
-          if (current.phase === 'armed' && top <= playAt) {
+          if (current.phase === 'armed' && reached) {
             const wait = revealWait()
             if (holdFor) holdRevealsFor(wait + holdFor, ref.current)
             return { ...current, phase: 'play', wait }

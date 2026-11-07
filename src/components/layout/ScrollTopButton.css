@@ -73,3 +73,18 @@
     translate: none;
   }
 }
+
+/* Tablet/phone: smaller, closer to the corner */
+@media (max-width: 1199px) {
+  .scroll-top {
+    right: var(--page-margin);
+    bottom: 1.25rem;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .scroll-top__icon {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+}

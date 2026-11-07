@@ -4,14 +4,20 @@
   - intro (first load, 1500ms): sweep in 0–645ms, hold until 855ms, slide away
   - between pages: --cover sweeps in, --hold stays, --reveal slides away
 */
-.intro-overlay {
+.intro-overlay-frame {
   position: fixed;
+  inset: 0;
+  z-index: 900; /* under the custom cursor */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.intro-overlay {
+  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
-  z-index: 900; /* under the custom cursor */
   width: 160vw;
-  pointer-events: none;
   background: linear-gradient(
     to right,
     rgb(148 88 188 / 0%) 0%,

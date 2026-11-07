@@ -102,12 +102,12 @@ function PageTransition() {
   }
 
   if (phase === 'idle') return null
+  // The frame clips the 160vw-wide panel to the screen (on phones, anything wider
+  // than the screen makes the browser zoom the page out)
   return (
-    <div
-      className={`intro-overlay intro-overlay--${phase}`}
-      aria-hidden="true"
-      onAnimationEnd={onAnimationEnd}
-    />
+    <div className="intro-overlay-frame" aria-hidden="true">
+      <div className={`intro-overlay intro-overlay--${phase}`} onAnimationEnd={onAnimationEnd} />
+    </div>
   )
 }
 

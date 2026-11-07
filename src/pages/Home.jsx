@@ -9,6 +9,7 @@ import { getImage } from '../utils/images.js'
 import { stagger } from '../utils/intro.js'
 import { revealDelay, useScrollReveal } from '../hooks/useScrollReveal.js'
 import { useIntroSlideUp, usePageEntrance } from '../hooks/usePageEntrance.js'
+import { useStickyFit } from '../hooks/useCover.js'
 import linkedinIcon from '../assets/icons/home/linkedin-purple.svg'
 import githubIcon from '../assets/icons/home/github-purple.svg'
 import facebookIcon from '../assets/icons/home/facebook-purple.svg'
@@ -116,9 +117,15 @@ function Home() {
   const trackRef = useRef(null)
   useIntroSlideUp(trackRef)
 
+  // The hero stays in place while the black section slides over it; on screens
+  // shorter than the hero it scrolls to its bottom first, then stays
+  const heroRef = useRef(null)
+  useStickyFit(heroRef)
+
   return (
     <>
       <Container
+        ref={heroRef}
         as="section"
         className={`hero${intro ? ' hero--intro' : ''}`}
         aria-labelledby="hero-name"

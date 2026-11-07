@@ -130,3 +130,73 @@
 .contact--play .contact__button {
   animation: intro-slide-left 600ms var(--ease-out-strong) backwards;
 }
+
+/* Tablet/phone: one column, everything left-aligned */
+@media (max-width: 1199px) {
+  .contact {
+    padding-top: 4.5rem;
+    padding-bottom: 5.5rem; /* room under the copyright for the back-to-top button */
+  }
+
+  .contact__inner {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .contact__heading {
+    margin-top: 0.25rem;
+    font-size: clamp(3.25rem, 14vw, 5.5rem);
+    line-height: 1.05;
+    white-space: normal;
+  }
+
+  .contact__links {
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .contact__links a {
+    gap: 0.5rem;
+  }
+
+  .contact__aside {
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 0;
+    text-align: left;
+  }
+
+  .contact__pitch {
+    margin-inline: 0;
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+
+  .contact__actions {
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+
+  .contact__availability,
+  .contact__copyright {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .contact__copyright {
+    margin-top: 3rem;
+  }
+}
+
+/* Phone: buttons stacked, at their natural width (leaves the right edge clear
+   for the back-to-top button) */
+@media (max-width: 639px) {
+  .contact__actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
