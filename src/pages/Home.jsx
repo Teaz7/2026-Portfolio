@@ -54,7 +54,7 @@ const techIcons = [
   the photo slides in; then the tag rows and the resume row rise one after another.
 */
 const NAME = 'Tyrell James Larroza'
-const COURSE = 'Bachelor of Science in Information Technology, Majoring in Software Technology'
+const COURSE = 'Bachelor of Science in Information Technology, Majoring in Software Technologies'
 const YEARS = '2023 – 2027'
 
 const nameTyping = { delay: 150, speed: 38 }
