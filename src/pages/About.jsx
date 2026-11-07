@@ -9,6 +9,7 @@ import { stagger } from '../utils/intro.js'
 import { useIntroSlideUp, usePageEntrance } from '../hooks/usePageEntrance.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 import { useStickyFit } from '../hooks/useCover.js'
+import { useScreenSize } from '../hooks/useScreenSize.js'
 import timelinePath from '../assets/icons/about/timeline-path.svg'
 import timelineArrow from '../assets/icons/about/timeline-arrow.svg'
 import timelineLine from '../assets/icons/about/timeline-line.svg'
@@ -163,6 +164,49 @@ function timelineSchedule() {
 const schedule = timelineSchedule()
 const TIMELINE_DURATION = schedule.milestoneAt.at(-1) + 500
 
+/*
+  Tablet/phone: the diagram doesn't fit, so the milestones stack in a column (chip,
+  then its years) joined by short vertical strokes. Each milestone slides in with
+  its years typing, then the stroke down to the next one draws.
+*/
+const STACK_STEP = 380
+
+const stackSchedule = milestones.map((_, index) => TIMELINE_START + index * STACK_STEP)
+const STACK_DURATION = stackSchedule.at(-1) + 500
+
+function StackedTimeline({ phase, run, wait }) {
+  const animated = phase !== 'done'
+  return (
+    <ol className="timeline-stack">
+      {milestones.map(({ label, years }, index) => (
+        <li key={label} className="timeline-stack__item">
+          <span className="timeline__chip" style={ms(wait + stackSchedule[index])}>
+            {label}
+          </span>
+          <span className="timeline__years">
+            <Typewriter
+              key={run}
+              text={years}
+              play={animated}
+              active={phase === 'play'}
+              delay={wait + stackSchedule[index] + 150}
+              speed={45}
+            />
+          </span>
+          {index < milestones.length - 1 && (
+            <img
+              className="timeline__line timeline-stack__line"
+              src={timelineLine}
+              alt=""
+              style={ms(wait + stackSchedule[index] + LINE_DELAY)}
+            />
+          )}
+        </li>
+      ))}
+    </ol>
+  )
+}
+
 const px = (value) => `${value / 16}rem`
 const ms = (value) => ({ animationDelay: `${value}ms` })
 
@@ -270,6 +314,7 @@ const STORY_DONE = Math.max(
 const courseTiming = { label: 30, rows: 450, rowStep: 300, tagStep: 70 }
 
 function About() {
+  const stacked = useScreenSize() !== 'desktop'
   const start = usePageEntrance(INTRO_DURATION)
   const animated = start !== null
   const introAt = (value) => ms((start ?? 0) + value)
@@ -286,7 +331,7 @@ function About() {
   const { ref: historyRef, ...history } = useScrollReveal({
     playAt: 0.75,
     resetAt: 1,
-    holdFor: TIMELINE_DURATION,
+    holdFor: stacked ? STACK_DURATION : TIMELINE_DURATION,
   })
   const { ref: storyRef, ...storyReveal } = useScrollReveal({
     playAt: 0.95,
@@ -364,7 +409,11 @@ function About() {
             <h2 id="history-title" className="about-label">
               {typed(history, HISTORY_LABEL, 0, HISTORY_LABEL_SPEED)}
             </h2>
-            <Timeline phase={history.phase} run={history.run} wait={history.wait} />
+            {stacked ? (
+              <StackedTimeline phase={history.phase} run={history.run} wait={history.wait} />
+            ) : (
+              <Timeline phase={history.phase} run={history.run} wait={history.wait} />
+            )}
           </Container>
         </div>
 

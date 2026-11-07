@@ -262,3 +262,207 @@
 .about-courses--play .about-coursework__row > li {
   animation: intro-slide-right 500ms var(--ease-out-strong) backwards;
 }
+
+/* ---------- Tablet/phone ---------- */
+@media (max-width: 1199px) {
+  .about-label {
+    font-size: 1rem;
+  }
+
+  .about-tag-row {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Intro: "ABOUT ME: TYRELL" wraps when it has to */
+  .about-intro {
+    margin-top: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .about-intro__title {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    column-gap: 0.3em;
+    font-size: clamp(2.5rem, 10vw, 5.5rem);
+    line-height: 1.05;
+    white-space: normal;
+  }
+
+  /* Tablet: text and photo side by side, like desktop */
+  .about-intro__body {
+    align-items: flex-start;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .about-intro__content {
+    flex: 1;
+    width: auto;
+    padding-top: 0;
+  }
+
+  .about-intro__text {
+    width: auto;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .about-intro__content .about-label {
+    margin-top: 2rem;
+  }
+
+  .about-intro__tags {
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .about-intro__photo {
+    width: 38%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    border-radius: 1.5rem;
+  }
+
+  .about-history {
+    padding-bottom: 4rem;
+  }
+
+  .about-history__stage {
+    padding-top: 4rem;
+  }
+
+  /* Stacked timeline (StackedTimeline in About.jsx) */
+  .timeline-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem; /* the stroke between two milestones spans this gap */
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .timeline-stack__item {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1rem;
+  }
+
+  .timeline-stack .timeline__chip {
+    position: static;
+    padding: 0.5rem 1.25rem;
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+
+  .timeline-stack .timeline__years {
+    position: static;
+    font-size: 1rem;
+    transform: none;
+  }
+
+  /* The brush stroke turned upright: it hangs from the chip down to the next one
+     (rotating around its top-left corner points its length downward) */
+  .timeline-stack__line {
+    top: 100%;
+    left: 1.75rem;
+    width: 2.5rem;
+    transform: rotate(90deg);
+    transform-origin: 0 0;
+  }
+
+  /* Story: one column */
+  .about-history__story {
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 3.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .about-history__column,
+  .about-history__column--right {
+    gap: 1.25rem;
+    width: auto;
+  }
+
+  .about-story__button {
+    margin-top: 0.75rem;
+  }
+
+  .about-history__coursework-label {
+    margin-top: 3.5rem;
+  }
+
+  .about-coursework {
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+}
+
+/* Phone: photo first, then the text */
+@media (max-width: 639px) {
+  .about-intro {
+    position: static; /* taller than the screen: scrolls normally so the tags stay readable */
+    margin-top: 2rem;
+  }
+
+  .about-intro__body {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .about-intro__photo {
+    order: -1;
+    width: 100%;
+    aspect-ratio: 4 / 3.4;
+    border-radius: 1.25rem;
+  }
+
+  .about-intro__content {
+    width: 100%;
+  }
+
+  /* Coursework: the longest names can't fit a pill on one line here, so the courses
+     become one list with diamond bullets (long names wrap under their own text) */
+  .about-coursework {
+    gap: 0.625rem;
+  }
+
+  .about-coursework__row {
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .about-coursework__row > li {
+    position: relative;
+    padding-left: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .about-coursework__row > li::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    left: 0.25rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 2px;
+    background: var(--color-purple);
+    transform: rotate(45deg);
+  }
+
+  .about-coursework .tag {
+    display: inline;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: normal;
+  }
+}
