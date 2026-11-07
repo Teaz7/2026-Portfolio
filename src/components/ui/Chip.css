@@ -14,13 +14,20 @@
   transition:
     background-color var(--transition),
     border-color var(--transition),
-    color var(--transition);
+    color var(--transition),
+    scale 160ms var(--ease-out-strong);
 }
 
 .chip:hover {
   border-color: var(--color-purple);
   background: var(--color-purple);
   color: var(--color-white);
+}
+
+/* Presses in slightly (instant), eases back on release */
+.chip:active {
+  scale: 0.97;
+  transition-duration: 0s;
 }
 
 .chip-list {

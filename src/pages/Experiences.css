@@ -537,7 +537,7 @@
 }
 
 .exp-entry--play .exp-intro {
-  animation: intro-wipe 1000ms var(--ease-out-strong) backwards;
+  animation: intro-wipe 700ms var(--ease-out-strong) backwards;
 }
 
 .exp-entry--play .exp-bullets li::before {

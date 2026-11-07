@@ -77,9 +77,11 @@
     #000 calc(100% - 0.75px),
     transparent
   );
+  /* Grows over links with the strong ease-out: snaps most of the way at once, then
+     settles. (Size, not scale, so the ring line stays 2px thick.) */
   transition:
-    width var(--transition),
-    height var(--transition);
+    width 250ms var(--ease-out-strong),
+    height 250ms var(--ease-out-strong);
 }
 
 /* Over links and buttons */

@@ -119,7 +119,7 @@
 }
 
 .contact--play .contact__links {
-  animation: intro-wipe 900ms var(--ease-out-strong) backwards;
+  animation: intro-wipe 700ms var(--ease-out-strong) backwards;
 }
 
 .contact--play .contact__pitch,

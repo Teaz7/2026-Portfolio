@@ -56,6 +56,7 @@ function Navbar() {
         <button
           type="button"
           className="navbar__toggle"
+          style={linkDelay(0)}
           aria-expanded={open}
           aria-controls="main-menu"
           aria-label={open ? 'Close menu' : 'Open menu'}

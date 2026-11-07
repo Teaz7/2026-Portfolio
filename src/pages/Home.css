@@ -174,7 +174,7 @@
 
 /* Page-load entrance (keyframes in IntroOverlay.css, delays set inline in Home.jsx) */
 .hero--intro .hero__bio {
-  animation: intro-wipe 1000ms var(--ease-out-strong) backwards;
+  animation: intro-wipe 700ms var(--ease-out-strong) backwards;
 }
 
 .hero--intro .hero__photo {

@@ -25,6 +25,15 @@ function ArrowIcon() {
   )
 }
 
+// Image fade-in (Carousel.css): mark each image once it has loaded. Images already
+// in the cache can finish before React attaches onLoad, so the ref checks too.
+const markLoaded = (event) => {
+  event.currentTarget.dataset.loaded = ''
+}
+const markIfLoaded = (img) => {
+  if (img?.complete && img.naturalWidth) img.dataset.loaded = ''
+}
+
 /*
   Dark band with screenshots, one group of images per slide.
   slides:     [[{ src, name, alt?, pixelated? }, ...], ...]  (chunk() in utils/images.js)
@@ -241,6 +250,8 @@ function Carousel({ slides, label, width, height, slideWidth = width, fit = 'hei
                       alt={isCopy ? '' : (image.alt ?? `${label} screen ${image.name}`)}
                       className={image.pixelated ? 'is-pixelated' : undefined}
                       draggable={false}
+                      ref={markIfLoaded}
+                      onLoad={markLoaded}
                     />
                   ))}
                 </div>

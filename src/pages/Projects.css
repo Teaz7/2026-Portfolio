@@ -207,7 +207,7 @@
 }
 
 .project--play .project__intro {
-  animation: intro-wipe 1000ms var(--ease-out-strong) backwards;
+  animation: intro-wipe 700ms var(--ease-out-strong) backwards;
 }
 
 .project--play .project__bullets li::before {

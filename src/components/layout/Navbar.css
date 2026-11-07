@@ -81,8 +81,10 @@
   background: var(--color-purple);
 }
 
-/* Page-load entrance (delays set inline in Navbar.jsx) */
+/* Page-load entrance (delays set inline in Navbar.jsx). The mobile menu button drops
+   in too, so it isn't showing through the purple sweep's soft edges. */
 .navbar--intro .navbar__brand,
+.navbar--intro .navbar__toggle,
 .navbar--intro .navbar__links > li {
   animation: intro-drop 550ms var(--ease-out-strong) backwards;
 }

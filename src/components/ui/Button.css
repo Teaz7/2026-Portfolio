@@ -7,11 +7,13 @@
   transition:
     background-color var(--transition-slow),
     border-color var(--transition-slow),
-    color var(--transition-slow);
+    color var(--transition-slow),
+    scale 160ms var(--ease-out-strong);
 }
 
-/* Click color shows instantly on press, then eases out on release */
+/* Click color and a slight press-in show instantly on press, then ease out on release */
 .button:active {
+  scale: 0.97;
   transition-duration: 0s;
 }
 

@@ -66,6 +66,17 @@
   height: 100%;
 }
 
+/* Images fade in once loaded (Carousel.jsx sets data-loaded), so slow-loading
+   screens don't pop in */
+.carousel__slide img {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+.carousel__slide img[data-loaded] {
+  opacity: 1;
+}
+
 /* Phone and web screens: full window height, natural width */
 .carousel--fit-height .carousel__slide img {
   height: 100%;
@@ -110,7 +121,8 @@
   color: var(--color-dark);
   transition:
     background-color var(--transition-slow),
-    color var(--transition-slow);
+    color var(--transition-slow),
+    scale 160ms var(--ease-out-strong);
 }
 
 .carousel__arrow:hover {
@@ -118,6 +130,7 @@
 }
 
 .carousel__arrow:active {
+  scale: 0.94; /* round button: same press as back to top */
   background: var(--carousel-accent, var(--color-purple));
   color: var(--color-white);
   transition-duration: 0s; /* instant on press, eases out on release */
